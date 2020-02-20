@@ -5,6 +5,7 @@
 #include <queue>
 #include <algorithm>
 #include <math.h>
+#include <tuple>
 
 using namespace std;
 
@@ -337,12 +338,15 @@ public:
         } // Read by line
 
         // Add "None" item for weapons
-        _data.emplace_back(ItemSlot::WEAPON_2H);
-        _weapon_2H.emplace_back(ItemSlot::WEAPON_2H);
-        _data.emplace_back(ItemSlot::WEAPON_MH);
-        _weapon_MH.emplace_back(ItemSlot::WEAPON_MH);
-        _data.emplace_back(ItemSlot::WEAPON_OH);
-        _weapon_OH.emplace_back(ItemSlot::WEAPON_OH);        
+        Item item_2h_none(ItemSlot::WEAPON_2H); 
+        _data.push_back(item_2h_none);
+        _weapon_2H.push_back(&item_2h_none);
+        Item item_mh_none(ItemSlot::WEAPON_MH);
+        _data.push_back(item_mh_none);
+        _weapon_MH.push_back(&item_mh_none);
+        Item item_oh_none(ItemSlot::WEAPON_OH);
+        _data.push_back(item_oh_none);
+        _weapon_OH.push_back(&item_oh_none);        
 
         return(true);
     };
@@ -385,7 +389,9 @@ public:
             istringstream str_str(line);
             string value;
             while (getline(str_str, value,',')) {
-                if (cnt_csv == 1) {
+                if (cnt_csv == 0) {
+                    continue;
+                } else if (cnt_csv == 1) {
                     _talentTree.push_back(stoi(value));
                 } else {
                     cout << "Malformed talents.csv" << endl;
@@ -426,10 +432,10 @@ enum class SpellNameRank {
     HEAL_R2,
     HEAL_R3,
     HEAL_R4,
-    GREATER_HEA_R1,
-    GREATER_HEA_R2,
-    GREATER_HEA_R3,
-    GREATER_HEA_R4,
+    GREATER_HEAL_R1,
+    GREATER_HEAL_R2,
+    GREATER_HEAL_R3,
+    GREATER_HEAL_R4,
     FLASH_HEAL_R1,
     FLASH_HEAL_R2,
     FLASH_HEAL_R3,
@@ -443,6 +449,7 @@ enum class SpellNameRank {
 class Spell {
 
 private:
+    SpellNameRank _spellNameRankEnum;
     SpellName _spellNameEnum;
     string _name;
     int _rank;
@@ -460,16 +467,17 @@ private:
     double _MpS;
 
 public:
-    Spell():_spellNameEnum(SpellName::NONE), _name(""), _rank(0),_school(MagicSchool::HOLY),_level(0),_crit(0.0),
+    Spell():_spellNameRankEnum(SpellNameRank::NONE), _spellNameEnum(SpellName::NONE), _name(""), _rank(0),_school(MagicSchool::HOLY),_level(0),_crit(0.0),
         _baseCastTime(0.0),_baseManaCost(0.0),_baseHealing(0.0),
         _effectiveCastTime(0.0), _effectiveManaCost(0.0), _effectiveHealing(0.0),
         _HpS(0.0), _HpM(0.0), _MpS(0.0) {}
-    Spell(const SpellName spell_name_enum,const string& spell_name, int spell_rank, int level, double base_cast_time, double base_mana_cost, double base_healing):
-        _spellNameEnum(spell_name_enum), _name(spell_name),_rank(spell_rank),_school(MagicSchool::HOLY),_level(level),_crit(0.0),
+    Spell(SpellNameRank spell_name_rank_enum, SpellName spell_name_enum, const string& spell_name, int spell_rank, int level, double base_cast_time, double base_mana_cost, double base_healing):
+        _spellNameRankEnum(spell_name_rank_enum), _spellNameEnum(spell_name_enum), _name(spell_name),_rank(spell_rank),_school(MagicSchool::HOLY),_level(level),_crit(0.0),
         _baseCastTime(base_cast_time),_baseManaCost(base_mana_cost),_baseHealing(base_healing),
         _effectiveCastTime(0.0), _effectiveManaCost(0.0), _effectiveHealing(0.0),
         _HpS(0.0), _HpM(0.0), _MpS(0.0) {}
 
+    inline SpellNameRank getSpellNameRankEnum() const { return(_spellNameRankEnum); };
     inline SpellName getSpellNameEnum() const { return(_spellNameEnum); };
     inline string getSpellName() const { return(_name); };
     inline int getRank() const { return(_rank); };
@@ -511,24 +519,24 @@ public:
     SpellBook(const TalentTree& talents, double spell_crit, double healing_power, bool T1_3PC, bool T2_8PC) {
         // Initialize base priest spells
         //const SpellNameRank spell_name_enum,const string& spell_name, int spell_rank, int level, double base_cast_time, double base_mana_cost, double base_healing
-        _spellBook.emplace_back(0,"Lesser Heal (Rank 1)", 1, 1, 1.5, 30.0, 53.0);
-        _spellBook.emplace_back(1,"Lesser Heal (Rank 2)", 2, 4, 2.0, 45.0, 84.0);
-        _spellBook.emplace_back(2,"Lesser Heal (Rank 3)", 3, 10, 2.5, 75.0, 154.0);
-        _spellBook.emplace_back(3,"Heal (Rank 1)", 1, 16, 3.0, 155.0, 330.0);
-        _spellBook.emplace_back(4,"Heal (Rank 2)", 2, 22, 3.0, 205.0, 476.0);
-        _spellBook.emplace_back(5,"Heal (Rank 3)", 3, 28, 3.0, 255.0, 624.0);
-        _spellBook.emplace_back(6,"Heal (Rank 4)", 4, 34, 3.0, 305.0, 781.0);
-        _spellBook.emplace_back(7,"Greater Heal (Rank 1)", 1, 40, 3.0, 370.0, 982.0);
-        _spellBook.emplace_back(8,"Greater Heal (Rank 2)", 2, 46, 3.0, 455.0, 1248.0);
-        _spellBook.emplace_back(9,"Greater Heal (Rank 3)", 3, 52, 3.0, 545.0, 1556.0);
-        _spellBook.emplace_back(10,"Greater Heal (Rank 4)", 4, 60, 3.0, 655.0, 1917.0);
-        _spellBook.emplace_back(11,"Flash Heal (Rank 1)", 1, 20, 1.5, 125.0, 225.0);
-        _spellBook.emplace_back(12,"Flash Heal (Rank 2)", 2, 26, 1.5, 155.0, 297.0);
-        _spellBook.emplace_back(13,"Flash Heal (Rank 3)", 3, 32, 1.5, 185.0, 373.0);
-        _spellBook.emplace_back(14,"Flash Heal (Rank 4)", 4, 38, 1.5, 215.0, 453.0);
-        _spellBook.emplace_back(15,"Flash Heal (Rank 5)", 5, 44, 1.5, 265.0, 584.0);
-        _spellBook.emplace_back(16,"Flash Heal (Rank 6)", 6, 50, 1.5, 315.0, 723.0);
-        _spellBook.emplace_back(17,"Flash Heal (Rank 7)", 7, 56, 1.5, 380.0, 902.0);  
+        _spellBook.emplace_back(SpellNameRank::LESSER_HEAL_R1,SpellName::LESSER_HEAL,"Lesser Heal (Rank 1)", 1, 1, 1.5, 30.0, 53.0);
+        _spellBook.emplace_back(SpellNameRank::LESSER_HEAL_R2,SpellName::LESSER_HEAL,"Lesser Heal (Rank 2)", 2, 4, 2.0, 45.0, 84.0);
+        _spellBook.emplace_back(SpellNameRank::LESSER_HEAL_R3,SpellName::LESSER_HEAL,"Lesser Heal (Rank 3)", 3, 10, 2.5, 75.0, 154.0);
+        _spellBook.emplace_back(SpellNameRank::HEAL_R1,SpellName::HEAL,"Heal (Rank 1)", 1, 16, 3.0, 155.0, 330.0);
+        _spellBook.emplace_back(SpellNameRank::HEAL_R2,SpellName::HEAL,"Heal (Rank 2)", 2, 22, 3.0, 205.0, 476.0);
+        _spellBook.emplace_back(SpellNameRank::HEAL_R3,SpellName::HEAL,"Heal (Rank 3)", 3, 28, 3.0, 255.0, 624.0);
+        _spellBook.emplace_back(SpellNameRank::HEAL_R4,SpellName::HEAL,"Heal (Rank 4)", 4, 34, 3.0, 305.0, 781.0);
+        _spellBook.emplace_back(SpellNameRank::GREATER_HEAL_R1,SpellName::GREATER_HEAL,"Greater Heal (Rank 1)", 1, 40, 3.0, 370.0, 982.0);
+        _spellBook.emplace_back(SpellNameRank::GREATER_HEAL_R2,SpellName::GREATER_HEAL,"Greater Heal (Rank 2)", 2, 46, 3.0, 455.0, 1248.0);
+        _spellBook.emplace_back(SpellNameRank::GREATER_HEAL_R3,SpellName::GREATER_HEAL,"Greater Heal (Rank 3)", 3, 52, 3.0, 545.0, 1556.0);
+        _spellBook.emplace_back(SpellNameRank::GREATER_HEAL_R4,SpellName::GREATER_HEAL,"Greater Heal (Rank 4)", 4, 60, 3.0, 655.0, 1917.0);
+        _spellBook.emplace_back(SpellNameRank::FLASH_HEAL_R1,SpellName::FLASH_HEAL,"Flash Heal (Rank 1)", 1, 20, 1.5, 125.0, 225.0);
+        _spellBook.emplace_back(SpellNameRank::FLASH_HEAL_R2,SpellName::FLASH_HEAL,"Flash Heal (Rank 2)", 2, 26, 1.5, 155.0, 297.0);
+        _spellBook.emplace_back(SpellNameRank::FLASH_HEAL_R3,SpellName::FLASH_HEAL,"Flash Heal (Rank 3)", 3, 32, 1.5, 185.0, 373.0);
+        _spellBook.emplace_back(SpellNameRank::FLASH_HEAL_R4,SpellName::FLASH_HEAL,"Flash Heal (Rank 4)", 4, 38, 1.5, 215.0, 453.0);
+        _spellBook.emplace_back(SpellNameRank::FLASH_HEAL_R5,SpellName::FLASH_HEAL,"Flash Heal (Rank 5)", 5, 44, 1.5, 265.0, 584.0);
+        _spellBook.emplace_back(SpellNameRank::FLASH_HEAL_R6,SpellName::FLASH_HEAL,"Flash Heal (Rank 6)", 6, 50, 1.5, 315.0, 723.0);
+        _spellBook.emplace_back(SpellNameRank::FLASH_HEAL_R7,SpellName::FLASH_HEAL,"Flash Heal (Rank 7)", 7, 56, 1.5, 380.0, 902.0);  
 
         // Determine effective stats
         for (Spell spell : _spellBook) {
@@ -537,7 +545,7 @@ public:
             if ( (spell.getSpellNameEnum() == SpellName::HEAL) || (spell.getSpellNameEnum() == SpellName::GREATER_HEAL) ) {
                 effective_cast_time -= 0.1*talents.getPoints(Talents::DIVINE_FURY);
             }
-            if ( T1_3PC && (spell.getSpellNameEnum == SpellName::FLASH_HEAL) ) {
+            if ( T1_3PC && (spell.getSpellNameEnum() == SpellName::FLASH_HEAL) ) {
                 effective_cast_time -= 0.1;
             }
             spell.setEffectiveCastTime(effective_cast_time);
@@ -557,7 +565,7 @@ public:
             double coefficient_penalty = min( 1.0 , 1-0.0375*(20 - spell.getLevel()) );
             double effective_coefficient = base_coefficient * coefficient_penalty;
             double healing = spell.getBaseHealing() + effective_coefficient*healing_power;
-            double healing_with_crit = 1.0 + 0.5*spell.getCrit();
+            double healing_with_crit = healing*(1.0 + 0.5*spell.getCrit());
             spell.setEffectiveHealing(healing_with_crit*(1.0 + 0.02*talents.getPoints(Talents::SPIRITUAL_HEALING)));
         } 
     }
@@ -637,8 +645,7 @@ public:
     Priest(): _talents(), _gearSet(), _spellBook(), 
     _healingPower(0.0), _intellect(0.0), _spirit(0.0), _maxMana(0.0), _spellCrit(0.0), _mp5_gear(0.0), _mp5_spirit(0.0), _mp5_casting(0.0),
     _T1_3PC(false), _T1_5PC(false), _T2_3PC(false), _T2_8PC(false),
-    _peakHps(0.0), _fastThroughput(0.0), _maxThroughput(0.0),
-    _peakHpS_Spell(), _fastThroughput_Spell(), _maxThroughput_Spell() {};
+    _peakHps(0.0), _peakHpS_Spell(), _fastThroughput(0.0), _fastThroughput_Spell(), _maxThroughput(0.0), _maxThroughput_Spell() {};
 
     void GearSwap(const vector<const Item*>& gear_set) {
         // Calculate stats from gear
@@ -648,6 +655,42 @@ public:
         _spellBook = SpellBook(_talents, _spellCrit, _healingPower, _T1_3PC, _T2_8PC);
         return;
     }
+
+    //     TalentTree _talents;
+    // vector<const Item*> _gearSet;
+    // SpellBook _spellBook;
+    // double , , , , , , , ;
+    // // Tier bonuses
+    //  , , , ;
+    // // Quantities to maximize
+    // double ; // Peak HpS possible
+    //  ;
+    // double ; // Best average HpS over whole encounter for spell cast time 2s or less
+    // Spell ;
+    // double ; // Best average HpS over whole encounter for all spells
+    // Spell ;
+
+    // inline double get() const { return(_healingPower); };
+    // inline double get() const { return(_intellect); };
+    // inline double get() const { return(_spirit); };
+    // inline double get() const { return(_maxMana); };
+    // inline double get() const { return(_spellCrit); };
+    // inline double get() const { return(_mp5_gear); };
+    // inline double get() const { return(_mp5_spirit); };
+    // inline double get() const { return(_mp5_casting); };
+    // inline bool get() const { return(_T1_3PC); };
+    // inline bool get() const { return(_T1_5PC); };
+    // inline bool get() const { return(_T2_3PC); };
+    // inline bool get() const { return(_T2_8PC); };
+    // inline double get() const { return(_peakHps); };
+    // inline Spell get() const { return(_peakHpS_Spell); };
+    // inline double get() const { return(_fastThroughput); };
+    // inline Spell get() const { return(_fastThroughput_Spell); };
+    // inline double get() const { return(_maxThroughput); };
+    // inline Spell get() const { return(_maxThroughput_Spell); };
+    // inline double get() const { return(); };
+
+    friend ostream & operator << (ostream& out, const Priest& priest); 
 
     double HealingOptimization(double duration) {
         // Initialize
@@ -688,7 +731,7 @@ public:
         }
 
         // Determine maximum healing in each category
-        for (int i = 0; i < _spellBook._spellBook.size(); ++i) {
+        for (int i = 0, N = _spellBook._spellBook.size(); i < N; ++i) {
             Spell spell = _spellBook._spellBook[i];
 
             // Fast healing throughput
@@ -707,6 +750,28 @@ public:
         return (_peakHps + _fastThroughput + _maxThroughput);
     }
 };
+
+ostream & operator << (ostream& out, const Priest& priest) {
+    cout << "Priest State:" << endl;
+    cout << "\tHealing Power:" << priest._healingPower << endl;
+    cout << "\tIntellect:" << priest._intellect << endl;
+    cout << "\tSpirit:" << priest._spirit << endl;
+    cout << "\tMax Mana:" << priest._maxMana << endl;
+    cout << "\tMp5 (spirit):" << priest._mp5_spirit << endl;
+    cout << "\tMp5 (gear):" << priest._mp5_gear << endl;
+    cout << "\tMp5 (casting):" << priest._mp5_casting << endl;
+    cout << "\tTier 1 - 3 Piece Bonus:" << priest._T1_3PC << endl;
+    cout << "\tTier 1 - 5 Piece Bonus:" << priest._T1_5PC << endl;
+    cout << "\tTier 2 - 3 Piece Bonus:" << priest._T2_3PC << endl;
+    cout << "\tTier 2 - 8 Piece Bonus:" << priest._T2_8PC << endl;
+    cout << "\tPeak HpS:" << priest._peakHps << endl;
+    cout << "\tPeak HpS Spell:" << priest._peakHpS_Spell << endl;
+    cout << "\tMax Throughput HpS (fast):" << priest._fastThroughput << endl;
+    cout << "\tMax Throughput HpS (fast) Spell:" << priest._fastThroughput_Spell << endl;
+    cout << "\tMax Throughput HpS:" << priest._maxThroughput << endl;
+    cout << "\tMax Throughput HpS Spell:" << priest._maxThroughput_Spell << endl;
+    return out;
+}
 
 int main() {
     // Read encounters.csv
@@ -744,7 +809,7 @@ int main() {
     // Query User for input
     cout << "Welcome to the Priest Gear Optimizer!" << endl << endl;
     cout << "Please select an encounter [#] to analyze:" << endl;
-    for (int i = 0; i < encounter_list.size(); ++i) cout << "[" << i << "]\t" << encounter_list[i] << ": " << encounter_durations[i] << " s" << endl;
+    for (int i = 0, N = encounter_list.size(); i < N; ++i) cout << "[" << i << "]\t" << encounter_list[i] << ": " << encounter_durations[i] << " s" << endl;
     int idx_inpt = 0;
     cout << "Encounter [#]: ";
     cin >> idx_inpt;
@@ -759,7 +824,7 @@ int main() {
     Priest priest;
 
     // Loop over every possible gear combination
-    //priority_queue<double, vector<const Item*>> pq; TODO: Figure out how to make priority queue and store gear sets
+    priority_queue< tuple<double, vector<const Item*>> , vector< tuple<double, vector<const Item*>> > > pq;
     //const Item* head : gear._head
     for (int i_head = 0, N_head = gear._head.size(); i_head < N_head; ++i_head) {
         for (int i_neck = 0, N_neck = gear._neck.size(); i_neck < N_neck; ++i_neck) {
@@ -809,6 +874,12 @@ int main() {
                                                                                 double healing = priest.HealingOptimization(duration);
 
                                                                                 // Push to priority queue
+                                                                                pq.emplace(healing,gear_set);
+
+                                                                                // Check
+                                                                                cout << priest << endl;
+                                                                                
+                                                                                break;
                                                                                 
                                                                             } // weapon_OH
                                                                         } // weapon_MH
@@ -834,7 +905,8 @@ int main() {
         } // neck
     } // head
 
-  return 0;
+    cout << "Done!" << endl;
+    return 0;
 } 
 
 // void ReadGearData
