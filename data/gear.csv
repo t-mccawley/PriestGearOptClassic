@@ -3,7 +3,7 @@ finger,Pure Elementium Band,Nefarian,0.06,0,53,10,10,0,0,0.00,FALSE,TRUE
 finger,Cauterizing Band,Majordomo Executus,0.21,0,46,12,0,0,0,0.00,TRUE,FALSE
 finger,Band of Sulfuras,Ragnaros,0.16,0,0,23,10,0,0,0.00,FALSE,TRUE
 finger,Ring of Blackrock,3 Drakes,0.22,0,19,0,0,9,0,0.00,FALSE,TRUE
-finger,Seal of Rivendare,--,1.0,0,0,17,7,0,0,0.00,TRUE,FALSE
+finger,Seal of Rivendare,Bank,1.0,0,0,17,7,0,0,0.00,TRUE,FALSE
 finger,Band of Forced Concentration,Ebonroc,0.19,0,21,12,0,0,0,0.00,FALSE,TRUE
 finger,Emerald Flame Ring,Prince Tortheldrin,0.24,0,15,12,8,0,0,0.00,TRUE,FALSE
 finger,Seal of the Archmagus,Baron Geddon,0.33,0,0,11,11,3,0,0.00,TRUE,TRUE
@@ -21,7 +21,7 @@ trinket,Second Wind,Golem Lord Argelmach,0.09,0,22.0,0.0,0.0,1.7,0.0,0.00,TRUE,T
 trinket,Shard of Afrasa,Quest (Heroes of Old),1.00,0,0.0,0.0,0.0,5.0,0.0,0.00,TRUE,TRUE
 trinket,Blessed Prayer Beads,Quest (ST),1.00,0,31.7,0.0,0.0,0.0,0.0,0.00,TRUE,TRUE
 head,Halo of Transcendence,Onyxia,1.00,2,48,27,22,0,0,0.00,TRUE,TRUE
-head,"Mish'undare, Circlet of the Mind Flayer",Nefarian,0.19,0,35,24,9,0,0,0.02,FALSE,TRUE
+head,Mish'undare Circlet of the Mind Flayer,Nefarian,0.19,0,35,24,9,0,0,0.02,FALSE,TRUE
 head,Circlet of Prophecy,Garr,0.13,1,12,27,17,0,0,0.00,TRUE,TRUE
 head,Eternal Crown (of Healing),World Drop,0.06,0,64,0,0,0,0,0.00,TRUE,TRUE
 neck,Animated Chain Necklace,Ramstein the Gorger,0.12,0,33,0,6,0,0,0.00,TRUE,TRUE
@@ -41,12 +41,12 @@ back,Shroud of Pure Thought,Flamegor,0.13,0,33,11,0,6,0,0.00,FALSE,TRUE
 back,Hide of the Wild,Crafting,1.00,0,42,10,0,0,0,0.00,TRUE,TRUE
 back,Cloak of the Brood Lord,Nefarian,0.06,0,28,14,0,0,0,0.00,FALSE,TRUE
 back,Archivist Cape (of the Owl),Bank,1.00,0,0,9,9,4,0,0.00,TRUE,TRUE
-back,Faded Hakkari Cloak,--,1.00,0,0,8,0,6,0,0.00,TRUE,TRUE
-back,Spritecaster Cape,--,1.00,0,14,4,5,0,0,0.00,TRUE,TRUE
+back,Faded Hakkari Cloak,Bank,1.00,0,0,8,0,6,0,0.00,TRUE,TRUE
+back,Spritecaster Cape,Bank,1.00,0,14,4,5,0,0,0.00,TRUE,TRUE
 chest,Robes of Transcendence,Nefarian,0.13,2,57,27,16,0,0,0.00,FALSE,TRUE
 chest,Robes of Prophecy,Golemagg the Incinerator,0.13,1,22,27,17,0,0,0.00,TRUE,TRUE
 chest,Truefaith Vestments,Crafting,1.00,0,73,0,0,6,0,0.00,TRUE,TRUE
-chest,Robe of Volatile Power,"Gehennas, Lucifron, Shazzrah",0.14,0,23,15,10,0,0,0.02,FALSE,TRUE
+chest,Robe of Volatile Power,Gehennas / Lucifron / Shazzrah,0.14,0,23,15,10,0,0,0.02,FALSE,TRUE
 chest,Mindsurge Robe,Mizzle the Crafty,0.02,0,0,13,0,10,0,0.00,TRUE,TRUE
 chest,Robes of the Exalted,Baron Rivendare,0.14,0,68,5,11,0,0,0.00,TRUE,TRUE
 wrists,Vambraces of Prophecy,MC Trash,0.07,1,24,14,10,2,0,0.00,TRUE,TRUE
@@ -56,14 +56,14 @@ wrists,Bracers of Arcane Accuracy,Broodlord Lashlayer,0.23,0,21,12,0,0,0,0.00,FA
 wrists,Magiskull Cuffs,World Drop,0.01,0,0,17,0,0,0,0.00,TRUE,TRUE
 wrists,Dryad's Wrist Bindings,Warsong Riders (Exalted),1.00,0,22,8,7,0,0,0.00,TRUE,TRUE
 wrists,Flameweave Cuffs (of Healing),Bank,1.00,0,33,0,0,0,0,0.00,TRUE,TRUE
-MH,Lok'amir il Romathis,Nefarian,0.50,0,84,18,8,0,0,0.00,FALSE,TRUE
-MH,Claw of Chromaggus,Chromaggus,0.12,0,64,17,0,4,0,0.00,FALSE,TRUE
-MH,Aurastone Hammer,Garr,0.20,0,25,10,0,5,0,0.00,FALSE,TRUE
-MH,The Hammer of Grace,--,1.00,0,31,0,0,0,0,0.00,TRUE,TRUE
-OH,Lei of the Lifegiver,Frostwolf Clan (Exalted),1.00,0,53,0,0,3,0,0.00,TRUE,TRUE
-OH,Master Dragonslayer's Orb,Nefarian,1.00,0,28,14,0,0,0,0.00,FALSE,TRUE
-OH,Thaurissan's Royal Scepter, Emperor Dagran Thaurissan,0.23,0,22,5,10,0,0,0.00,TRUE,TRUE
-2H,Benediction,Class Quest,1.00,0,106,31,12,0,0,0.02,TRUE,TRUE
+weapon MH,Lok'amir il Romathis,Nefarian,0.50,0,84,18,8,0,0,0.00,FALSE,TRUE
+weapon MH,Claw of Chromaggus,Chromaggus,0.12,0,64,17,0,4,0,0.00,FALSE,TRUE
+weapon MH,Aurastone Hammer,Garr,0.20,0,25,10,0,5,0,0.00,FALSE,TRUE
+weapon MH,The Hammer of Grace,BRD,1.00,0,31,0,0,0,0,0.00,TRUE,TRUE
+weapon OH,Lei of the Lifegiver,Frostwolf Clan (Exalted),1.00,0,53,0,0,3,0,0.00,TRUE,TRUE
+weapon OH,Master Dragonslayer's Orb,Nefarian,1.00,0,28,14,0,0,0,0.00,FALSE,TRUE
+weapon OH,Thaurissan's Royal Scepter, Emperor Dagran Thaurissan,0.23,0,22,5,10,0,0,0.00,TRUE,TRUE
+weapon 2H,Benediction,Class Quest,1.00,0,106,31,12,0,0,0.02,TRUE,TRUE
 wand,Essence Gatherer,BWL Trash,0.03,0,0,7,0,5,0,0.00,FALSE,TRUE
 wand,Lunar Wand (of Healing),World Drop,0.01,0,20,0,0,0,0,0.00,TRUE,TRUE
 wand,Dragon's Touch,Flamegor,0.09,0,6,12,0,0,0,0.00,FALSE,TRUE
@@ -71,7 +71,7 @@ wand,Bonecreeper Stylus,Darkmaster Gandling,0.13,0,11,4,0,0,0,0.00,TRUE,TRUE
 wand,Crimson Shocker,MC Trash,0.01,0,0,10,0,0,0,0.00,TRUE,TRUE
 wand,Wizard's Hand (of Healing),World Drop,1.00,0,15,0,0,0,0,0.00,TRUE,TRUE
 wand,Mana Channeling Wand,Cho'Rush the Observer,0.43,0,0,0,0,4,0,0.00,TRUE,TRUE
-wand,Regal Star of the Owl,--,--%,0,0,6,7,0,0,0.00,TRUE,TRUE
+wand,Regal Star of the Owl,AH,1.0,0,0,6,7,0,0,0.00,TRUE,TRUE
 hands,Gloves of Prophecy,Gehennas,0.32,1,18,15,15,6,0,0.00,TRUE,TRUE
 hands,Handguards of Transcendence,3 Drakes,0.15,2,29,20,13,0,0,0.01,FALSE,TRUE
 hands,Hands of the Exalted Herald,Princess Moira Bronzebeard,0.23,0,33,13,12,0,0,0.00,TRUE,TRUE

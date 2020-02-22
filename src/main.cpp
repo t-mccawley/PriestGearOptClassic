@@ -83,17 +83,54 @@ private:
     const double _mp5;
     const double _mana;
     const double _spellCrit;
-    const bool _owned;
+    const bool _available;
 
 public:
-    Item():_itemSlot(ItemSlot::HEAD),_itemName("None"),_source(""),_dropChance(1.0),_unique(true),_tier(0),
-        _healingPower(0.0),_intellect(0.0),_spirit(0.0),_mp5(0.0),_mana(0.0),_spellCrit(0.0),_owned(true) {}
-    Item(const ItemSlot item_slot):_itemSlot(item_slot),_itemName("None"),_source(""),_dropChance(1.0),_unique(true),_tier(0),
-        _healingPower(0.0),_intellect(0.0),_spirit(0.0),_mp5(0.0),_mana(0.0),_spellCrit(0.0),_owned(true) {}
+    Item():
+        _itemSlot(ItemSlot::HEAD),
+        _itemName("None"),
+        _source(""),
+        _dropChance(1.0),
+        _unique(true),
+        _tier(0),
+        _healingPower(0.0),
+        _intellect(0.0),
+        _spirit(0.0),
+        _mp5(0.0),
+        _mana(0.0),
+        _spellCrit(0.0),
+        _available(true) 
+        {};
+    Item(const ItemSlot item_slot):
+        _itemSlot(item_slot),
+        _itemName("None"),
+        _source(""),
+        _dropChance(1.0),
+        _unique(true),
+        _tier(0),
+        _healingPower(0.0),
+        _intellect(0.0),
+        _spirit(0.0),
+        _mp5(0.0),
+        _mana(0.0),
+        _spellCrit(0.0),
+        _available(true) 
+        {};
     Item(const ItemSlot item_slot, const string& item_name, const string& source, double drop_chance, bool unique, int tier, 
-        double healing_power, double intellect, double spirit, double mp5, double mana, double spell_crit, bool owned):
-        _itemSlot(item_slot),_itemName(item_name),_source(source),_dropChance(drop_chance),_unique(unique),_tier(tier),
-        _healingPower(healing_power),_intellect(intellect),_spirit(spirit),_mp5(mp5),_mana(mana),_spellCrit(spell_crit),_owned(owned) 
+        double healing_power, double intellect, double spirit, double mp5, double mana, double spell_crit, bool available):
+        _itemSlot(item_slot),
+        _itemName(item_name),
+        _source(source),
+        _dropChance(drop_chance),
+        _unique(unique),
+        _tier(tier),
+        _healingPower(healing_power),
+        _intellect(intellect),
+        _spirit(spirit),
+        _mp5(mp5),
+        _mana(mana),
+        _spellCrit(spell_crit),
+        _available(available) 
         {};
 
     inline ItemSlot getSlot() const { return(_itemSlot); };
@@ -108,7 +145,7 @@ public:
     inline double getMp5() const { return(_mp5); };
     inline double getMana() const { return(_mana); };
     inline double getSpellCrit() const { return(_spellCrit); };
-    inline bool getOwned() const { return(_owned); };
+    inline bool getAvailable() const { return(_available); };
 
     void PrintDetails() const {
         cout << _itemName << endl;
@@ -116,8 +153,8 @@ public:
         cout << "\tSource: " << _source << endl;
         cout << "\tDrop Chance: " << _dropChance*100.0 << "%" << endl;
         cout << "\tUnique: ";
-            if (_unique) cout << "TRUE" << endl;
-            else cout << "FALSE" << endl;
+        if (_unique) cout << "TRUE" << endl;
+        else cout << "FALSE" << endl;
         cout << "\tTier: " << _tier << endl;
         cout << "\tHealing Power: " << _healingPower << endl;
         cout << "\tIntellect: " << _intellect << endl;
@@ -125,9 +162,9 @@ public:
         cout << "\tMp5: " << _mp5 << endl;
         cout << "\tMana: " << _mana << endl;
         cout << "\tSpell Crit: " << _spellCrit*100.0 << "%" << endl;
-        cout << "\tOwned: ";
-            if (_owned) cout << "TRUE" << endl;
-            else cout << "FALSE" << endl;
+        cout << "\tAvailable: ";
+        if (_available) cout << "TRUE" << endl;
+        else cout << "FALSE" << endl;
         return;
     }
 };
@@ -170,6 +207,51 @@ public:
         _valid = Read_CSV(debug);
     };
 
+    inline bool getValidity() const { return(_valid); };
+
+    void PrintDetails() const {
+        // Print sum of items
+        int head_size, neck_size, shoulders_size, back_size, chest_size, wrists_size, weapon_2h_size, weapon_mh_size, weapon_oh_size, wand_size, hands_size, waist_size, legs_size, feet_size, finger_size, trinket_size;
+        head_size = _head.size();
+        neck_size = _neck.size();
+        shoulders_size = _shoulders.size();
+        back_size = _back.size();
+        chest_size = _chest.size();
+        wrists_size = _wrists.size();
+        weapon_2h_size = _weapon_2H.size();
+        weapon_mh_size = _weapon_MH.size();
+        weapon_oh_size = _weapon_OH.size();
+        wand_size = _wand.size();
+        hands_size = _hands.size();
+        waist_size = _waist.size();
+        legs_size = _legs.size();
+        feet_size = _feet.size();
+        finger_size = _finger.size();
+        trinket_size = _trinket.size();
+        int sum_size = head_size + neck_size + shoulders_size + back_size + chest_size + wrists_size + weapon_2h_size + weapon_mh_size + weapon_oh_size + wand_size + hands_size + waist_size + legs_size + feet_size + finger_size + trinket_size;
+        
+        cout << "GearDatabase Details:" << endl;
+        cout << "\tAll Items (_data): " << _data.size() << endl;
+        cout << "\tAll Items (sum slot lists): " << sum_size << endl;
+        cout << "\tHead Items: " << head_size << endl;
+        cout << "\tNeck Items: " << neck_size << endl;
+        cout << "\tShoulders Items: " << shoulders_size << endl;
+        cout << "\tBack Items: " << back_size << endl;
+        cout << "\tChest Items: " << chest_size << endl;
+        cout << "\tWrists Items: " << wrists_size << endl;
+        cout << "\tWeapon (2H) Items: " << weapon_2h_size << endl;
+        cout << "\tWeapon (MH) Items: " << weapon_mh_size << endl;
+        cout << "\tWeapon (OH) Items: " << weapon_oh_size << endl;
+        cout << "\tWand Items: " << wand_size << endl;
+        cout << "\tHands Items: " << hands_size << endl;
+        cout << "\tWaist Items: " << waist_size << endl;
+        cout << "\tLegs Items: " << legs_size << endl;
+        cout << "\tFeet Items: " << feet_size << endl;
+        cout << "\tFinger Items: " << finger_size << endl;
+        cout << "\tTrinket Items: " << trinket_size << endl;
+        return;
+    }
+
     bool Read_CSV(bool debug) {
         // Read data from CSV
         // Return validity
@@ -194,7 +276,7 @@ public:
             ItemSlot item_slot;
             string item_name, source;
             double drop_chance, healing_power, intellect, spirit, mp5, mana, spell_crit;
-            bool unique, owned;
+            bool unique, available;
             int tier; 
             std::istringstream str_str(line);
             std::string value;
@@ -280,8 +362,8 @@ public:
                         spell_crit = stod(value);
                         break;
                     case 11:
-                        // Owned
-                        owned = StringToBool(value);
+                        // Available
+                        available = StringToBool(value);
                         break;
                     case 12:
                         // Unique
@@ -294,43 +376,46 @@ public:
                 ++cnt_csv;   
             } // Read data
             // Instantiate Item
-            Item item(item_slot, item_name, source, drop_chance, unique, tier, healing_power, intellect, spirit, mp5, mana, spell_crit, owned);
+            // Item(const ItemSlot item_slot, const string& item_name, const string& source, double drop_chance, bool unique, int tier, 
+            // double healing_power, double intellect, double spirit, double mp5, double mana, double spell_crit, bool available)
+            Item item(item_slot, item_name, source, drop_chance, unique, tier, healing_power, intellect, spirit, mp5, mana, spell_crit, available);
             if (debug) item.PrintDetails();
             // Store item
             _data.push_back(item);
+            const Item* item_address = &(_data.back());
             // Store reference to item in correct list
             if (item_slot == ItemSlot::HEAD) {
-                _head.push_back(&item);
+                _head.push_back(item_address);
             } else if (item_slot == ItemSlot::NECK) {
-                _neck.push_back(&item);
+                _neck.push_back(item_address);
             } else if (item_slot == ItemSlot::SHOULDERS) {
-                _shoulders.push_back(&item);
+                _shoulders.push_back(item_address);
             } else if (item_slot == ItemSlot::BACK) {
-                _back.push_back(&item);
+                _back.push_back(item_address);
             } else if (item_slot == ItemSlot::CHEST) {
-                _chest.push_back(&item);
+                _chest.push_back(item_address);
             } else if (item_slot == ItemSlot::WRISTS) {
-                _wrists.push_back(&item);
+                _wrists.push_back(item_address);
             } else if (item_slot == ItemSlot::WEAPON_2H) {
-                _weapon_2H.push_back(&item);
+                _weapon_2H.push_back(item_address);
             } else if (item_slot == ItemSlot::WEAPON_MH) {
-                _weapon_MH.push_back(&item);
+                _weapon_MH.push_back(item_address);
             } else if (item_slot == ItemSlot::WEAPON_OH) {
-                _weapon_OH.push_back(&item);
+                _weapon_OH.push_back(item_address);
             } else if (item_slot == ItemSlot::WAND) {
-                _wand.push_back(&item);
+                _wand.push_back(item_address);
             } else if (item_slot == ItemSlot::HANDS) {
-                _hands.push_back(&item);
+                _hands.push_back(item_address);
             } else if (item_slot == ItemSlot::WAIST) {
-                _waist.push_back(&item);
+                _waist.push_back(item_address);
             } else if (item_slot == ItemSlot::LEGS) {
-                _legs.push_back(&item);
+                _legs.push_back(item_address);
             } else if (item_slot == ItemSlot::FEET) {
-                _feet.push_back(&item);
+                _feet.push_back(item_address);
             } else if (item_slot == ItemSlot::FINGER) {
-                _finger.push_back(&item);
+                _finger.push_back(item_address);
             } else if (item_slot == ItemSlot::TRINKET) {
-                _trinket.push_back(&item);
+                _trinket.push_back(item_address);
             } else {
                 cout << "Wrong item slot type" << endl;
                 return false;
@@ -774,6 +859,7 @@ ostream & operator << (ostream& out, const Priest& priest) {
 }
 
 int main() {
+    bool verbose = true;
     // Read encounters.csv
     ifstream file ( "../data/encounters.csv" );
     if (!file.good()) {
@@ -818,16 +904,28 @@ int main() {
     double duration = encounter_durations[idx_inpt];
 
     // Initialize GearDatabase
+    if (verbose) cout << "Initializing GearDatabase" << endl;
     GearDatabase gear(false);
+    if (!gear.getValidity()) {
+        cout << "GearDatabase not initialized correctly" << endl;
+        return 1;
+    }
+    if (verbose) gear.PrintDetails();
 
     // Instantiate Priest
+    if (verbose) cout << "Initializing Priest" << endl;
     Priest priest;
 
     // Loop over every possible gear combination
-    priority_queue< tuple<double, vector<const Item*>> , vector< tuple<double, vector<const Item*>> > > pq;
+    if (verbose) cout << "Starting Optimization" << endl;
+    vector< tuple< double , vector<const Item*> > > opt_list;
     //const Item* head : gear._head
     for (int i_head = 0, N_head = gear._head.size(); i_head < N_head; ++i_head) {
+        const Item* head = gear._head[i_head];
+        if (verbose) head->PrintDetails();
         for (int i_neck = 0, N_neck = gear._neck.size(); i_neck < N_neck; ++i_neck) {
+            const Item* neck = gear._neck[i_neck];
+            if (verbose) neck->PrintDetails();
             for (int i_shoulders = 0, N_shoulders = gear._shoulders.size(); i_shoulders < N_shoulders; ++i_shoulders) {
                 for (int i_back = 0, N_back = gear._back.size(); i_back < N_back; ++i_back) {
                     for (int i_chest = 0, N_chest = gear._chest.size(); i_chest < N_chest; ++i_chest) {
@@ -839,8 +937,12 @@ int main() {
                                             for (int i_feet = 0, N_feet = gear._feet.size(); i_feet < N_feet; ++i_feet) {
                                                 for (int i_finger_1 = 0, N_finger_1 = gear._finger.size(); i_finger_1 < N_finger_1; ++i_finger_1) {
                                                     for (int i_finger_2 = 0, N_finger_2 = gear._finger.size(); i_finger_2 < N_finger_2; ++i_finger_2) {
+                                                        // Check if need to skip finger_2 (skip when duplicate item and item is not unique)
+                                                        if ( !gear._finger[i_finger_2]->getUnique() && ( gear._finger[i_finger_1]->getName().compare(gear._finger[i_finger_2]->getName()) == 0) ) continue;
                                                         for (int i_trinket_1 = 0, N_trinket_1 = gear._trinket.size(); i_trinket_1 < N_trinket_1; ++i_trinket_1) {
                                                             for (int i_trinket_2 = 0, N_trinket_2 = gear._trinket.size(); i_trinket_2 < N_trinket_2; ++i_trinket_2) {
+                                                                // Check if need to skip trinket_2 (skip when duplicate item and item is not unique)
+                                                                if ( !gear._finger[i_trinket_2]->getUnique() && ( gear._finger[i_trinket_1]->getName().compare(gear._finger[i_trinket_2]->getName()) == 0) ) continue;
                                                                 for (int i_weapon_2H = 0, N_weapon_2H = gear._weapon_2H.size(); i_weapon_2H < N_weapon_2H; ++i_weapon_2H) {
 
                                                                     if (gear._weapon_2H[i_weapon_2H]->getName().compare("None") == 0) {
@@ -874,7 +976,7 @@ int main() {
                                                                                 double healing = priest.HealingOptimization(duration);
 
                                                                                 // Push to priority queue
-                                                                                pq.emplace(healing,gear_set);
+                                                                                opt_list.emplace_back(healing,gear_set);
 
                                                                                 // Check
                                                                                 cout << priest << endl;
