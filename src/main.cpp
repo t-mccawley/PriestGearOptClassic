@@ -6,6 +6,7 @@
 #include <algorithm>
 #include <math.h>
 #include <tuple>
+#include <chrono>
 
 using namespace std;
 
@@ -60,7 +61,7 @@ ostream & operator << (ostream& out, const ItemSlot& item_slot) {
         cout << "Feet";
     } else if (i == 14) {
         cout << "Finger";
-    } else if (i == 14) {
+    } else if (i == 15) {
         cout << "Trinket";
     } else {
         cout << "ERROR";
@@ -71,6 +72,7 @@ ostream & operator << (ostream& out, const ItemSlot& item_slot) {
 class Item {
 
 private:
+    const int _ID;
     const ItemSlot _itemSlot;
     const string _itemName;
     const string _source;
@@ -87,6 +89,7 @@ private:
 
 public:
     Item():
+        _ID(0),
         _itemSlot(ItemSlot::HEAD),
         _itemName("None"),
         _source(""),
@@ -101,7 +104,8 @@ public:
         _spellCrit(0.0),
         _available(true) 
         {};
-    Item(const ItemSlot item_slot):
+    Item(int id, ItemSlot item_slot):
+        _ID(id),
         _itemSlot(item_slot),
         _itemName("None"),
         _source(""),
@@ -116,8 +120,9 @@ public:
         _spellCrit(0.0),
         _available(true) 
         {};
-    Item(const ItemSlot item_slot, const string& item_name, const string& source, double drop_chance, bool unique, int tier, 
+    Item(int id, ItemSlot item_slot, const string& item_name, const string& source, double drop_chance, bool unique, int tier, 
         double healing_power, double intellect, double spirit, double mp5, double mana, double spell_crit, bool available):
+        _ID(id),
         _itemSlot(item_slot),
         _itemName(item_name),
         _source(source),
@@ -133,6 +138,7 @@ public:
         _available(available) 
         {};
 
+    inline int getID() const { return(_ID); };
     inline ItemSlot getSlot() const { return(_itemSlot); };
     inline string getName() const { return(_itemName); };
     inline string getSource() const { return(_source); };
@@ -147,24 +153,27 @@ public:
     inline double getSpellCrit() const { return(_spellCrit); };
     inline bool getAvailable() const { return(_available); };
 
-    void PrintDetails() const {
-        cout << _itemName << endl;
-        cout << "\tSlot: " << _itemSlot << endl;
-        cout << "\tSource: " << _source << endl;
-        cout << "\tDrop Chance: " << _dropChance*100.0 << "%" << endl;
-        cout << "\tUnique: ";
-        if (_unique) cout << "TRUE" << endl;
-        else cout << "FALSE" << endl;
-        cout << "\tTier: " << _tier << endl;
-        cout << "\tHealing Power: " << _healingPower << endl;
-        cout << "\tIntellect: " << _intellect << endl;
-        cout << "\tSpirit: " << _spirit << endl;
-        cout << "\tMp5: " << _mp5 << endl;
-        cout << "\tMana: " << _mana << endl;
-        cout << "\tSpell Crit: " << _spellCrit*100.0 << "%" << endl;
-        cout << "\tAvailable: ";
-        if (_available) cout << "TRUE" << endl;
-        else cout << "FALSE" << endl;
+    void PrintDetails(bool verbose) const {
+        cout << _itemSlot << endl;
+        cout << "\t" << _itemName << endl;
+        if (verbose) {
+            cout << "\tID: " << _ID << endl;
+            cout << "\tSource: " << _source << endl;
+            cout << "\tDrop Chance: " << _dropChance*100.0 << "%" << endl;
+            cout << "\tUnique: ";
+            if (_unique) cout << "TRUE" << endl;
+            else cout << "FALSE" << endl;
+            cout << "\tTier: " << _tier << endl;
+            cout << "\tHealing Power: " << _healingPower << endl;
+            cout << "\tIntellect: " << _intellect << endl;
+            cout << "\tSpirit: " << _spirit << endl;
+            cout << "\tMp5: " << _mp5 << endl;
+            cout << "\tMana: " << _mana << endl;
+            cout << "\tSpell Crit: " << _spellCrit*100.0 << "%" << endl;
+            cout << "\tAvailable: ";
+            if (_available) cout << "TRUE" << endl;
+            else cout << "FALSE" << endl;
+        }
         return;
     }
 };
@@ -180,34 +189,65 @@ inline bool StringToBool(const string& str) {
 class GearDatabase {
 
 private:
-    vector<Item> _data;
     bool _valid;
+    vector<Item> _head;
+    vector<Item> _neck;
+    vector<Item> _shoulders;
+    vector<Item> _back;
+    vector<Item> _chest;
+    vector<Item> _wrists;
+    vector<Item> _weapon_2H;
+    vector<Item> _weapon_MH;
+    vector<Item> _weapon_OH;
+    vector<Item> _wand;
+    vector<Item> _hands;
+    vector<Item> _waist;
+    vector<Item> _legs;
+    vector<Item> _feet;
+    vector<Item> _finger;
+    vector<Item> _trinket;
 
 public:
-    vector<const Item*> _head;
-    vector<const Item*> _neck;
-    vector<const Item*> _shoulders;
-    vector<const Item*> _back;
-    vector<const Item*> _chest;
-    vector<const Item*> _wrists;
-    vector<const Item*> _weapon_2H;
-    vector<const Item*> _weapon_MH;
-    vector<const Item*> _weapon_OH;
-    vector<const Item*> _wand;
-    vector<const Item*> _hands;
-    vector<const Item*> _waist;
-    vector<const Item*> _legs;
-    vector<const Item*> _feet;
-    vector<const Item*> _finger;
-    vector<const Item*> _trinket;
 
-    GearDatabase(): _data(),_valid(false) {};
+    GearDatabase(): _valid(false) {};
     GearDatabase(bool debug) {
         // Read data from CSV
         _valid = Read_CSV(debug);
     };
 
     inline bool getValidity() const { return(_valid); };
+    inline Item getHeadItem(int idx) const { return(_head[idx]); };
+    inline int getHeadSize() const { return(_head.size()); };
+    inline Item getNeckItem(int idx) const { return(_neck[idx]); };
+    inline int getNeckSize() const { return(_neck.size()); };
+    inline Item getShouldersItem(int idx) const { return(_shoulders[idx]); };
+    inline int getShouldersSize() const { return(_shoulders.size()); };
+    inline Item getBackItem(int idx) const { return(_back[idx]); };
+    inline int getBackSize() const { return(_back.size()); };
+    inline Item getChestItem(int idx) const { return(_chest[idx]); };
+    inline int getChestSize() const { return(_chest.size()); };
+    inline Item getWristsItem(int idx) const { return(_wrists[idx]); };
+    inline int getWristsSize() const { return(_wrists.size()); };
+    inline Item getWeapon2HItem(int idx) const { return(_weapon_2H[idx]); };
+    inline int getWeapon2HSize() const { return(_weapon_2H.size()); };
+    inline Item getWeaponMHItem(int idx) const { return(_weapon_MH[idx]); };
+    inline int getWeaponMHSize() const { return(_weapon_MH.size()); };
+    inline Item getWeaponOHItem(int idx) const { return(_weapon_OH[idx]); };
+    inline int getWeaponOHSize() const { return(_weapon_OH.size()); };
+    inline Item getWandItem(int idx) const { return(_wand[idx]); };
+    inline int getWandSize() const { return(_wand.size()); };
+    inline Item getHandsItem(int idx) const { return(_hands[idx]); };
+    inline int getHandsSize() const { return(_hands.size()); };
+    inline Item getWaistItem(int idx) const { return(_waist[idx]); };
+    inline int getWaistSize() const { return(_waist.size()); };
+    inline Item getLegsItem(int idx) const { return(_legs[idx]); };
+    inline int getLegsSize() const { return(_legs.size()); };
+    inline Item getFeetItem(int idx) const { return(_feet[idx]); };
+    inline int getFeetSize() const { return(_feet.size()); };
+    inline Item getFingerItem(int idx) const { return(_finger[idx]); };
+    inline int getFingerSize() const { return(_finger.size()); };
+    inline Item getTrinketItem(int idx) const { return(_trinket[idx]); };
+    inline int getTrinketSize() const { return(_trinket.size()); };
 
     void PrintDetails() const {
         // Print sum of items
@@ -229,10 +269,9 @@ public:
         finger_size = _finger.size();
         trinket_size = _trinket.size();
         int sum_size = head_size + neck_size + shoulders_size + back_size + chest_size + wrists_size + weapon_2h_size + weapon_mh_size + weapon_oh_size + wand_size + hands_size + waist_size + legs_size + feet_size + finger_size + trinket_size;
-        
+
         cout << "GearDatabase Details:" << endl;
-        cout << "\tAll Items (_data): " << _data.size() << endl;
-        cout << "\tAll Items (sum slot lists): " << sum_size << endl;
+        cout << "\tAll Items: " << sum_size << endl;
         cout << "\tHead Items: " << head_size << endl;
         cout << "\tNeck Items: " << neck_size << endl;
         cout << "\tShoulders Items: " << shoulders_size << endl;
@@ -261,6 +300,11 @@ public:
             cout << "Bad gear data file path!" << endl;
             return false;
         }
+
+        // Add "None" item for weapons
+        _weapon_2H.emplace_back(-1, ItemSlot::WEAPON_2H);
+        _weapon_MH.emplace_back(-1, ItemSlot::WEAPON_MH);
+        _weapon_OH.emplace_back(-1, ItemSlot::WEAPON_OH);   
            
         // Skip first line   
         string line; 
@@ -277,7 +321,7 @@ public:
             string item_name, source;
             double drop_chance, healing_power, intellect, spirit, mp5, mana, spell_crit;
             bool unique, available;
-            int tier; 
+            int tier, id; 
             std::istringstream str_str(line);
             std::string value;
             while (getline(str_str, value,',')) {
@@ -286,36 +330,52 @@ public:
                         // Slot
                         if (value.compare("head") == 0) {
                             item_slot = ItemSlot::HEAD;
+                            id = _head.size();
                         } else if (value.compare("neck") == 0) {
                             item_slot = ItemSlot::NECK;
+                            id = _neck.size();
                         } else if (value.compare("shoulders") == 0) {
                             item_slot = ItemSlot::SHOULDERS;
+                            id = _shoulders.size();
                         } else if (value.compare("back") == 0) {
                             item_slot = ItemSlot::BACK;
+                            id = _back.size();
                         } else if (value.compare("chest") == 0) {
                             item_slot = ItemSlot::CHEST;
+                            id = _chest.size();
                         } else if (value.compare("wrists") == 0) {
                             item_slot = ItemSlot::WRISTS;
+                            id = _wrists.size();
                         } else if (value.compare("weapon 2H") == 0) {
                             item_slot = ItemSlot::WEAPON_2H;
+                            id = _weapon_2H.size();
                         } else if (value.compare("weapon MH") == 0) {
                             item_slot = ItemSlot::WEAPON_MH;
+                            id = _weapon_MH.size();
                         } else if (value.compare("weapon OH") == 0) {
                             item_slot = ItemSlot::WEAPON_OH;
+                            id = _weapon_OH.size();
                         } else if (value.compare("wand") == 0) {
                             item_slot = ItemSlot::WAND;
+                            id = _wand.size();
                         } else if (value.compare("hands") == 0) {
                             item_slot = ItemSlot::HANDS;
+                            id = _hands.size();
                         } else if (value.compare("waist") == 0) {
                             item_slot = ItemSlot::WAIST;
+                            id = _waist.size();
                         } else if (value.compare("legs") == 0) {
                             item_slot = ItemSlot::LEGS;
+                            id = _legs.size();
                         } else if (value.compare("feet") == 0) {
                             item_slot = ItemSlot::FEET;
+                            id = _feet.size();
                         } else if (value.compare("finger") == 0) {
                             item_slot = ItemSlot::FINGER;
+                            id = _finger.size();
                         } else if (value.compare("trinket") == 0) {
                             item_slot = ItemSlot::TRINKET;
+                            id = _trinket.size();
                         } else {
                             cout << "Wrong item slot type" << endl;
                             return false;
@@ -378,60 +438,46 @@ public:
             // Instantiate Item
             // Item(const ItemSlot item_slot, const string& item_name, const string& source, double drop_chance, bool unique, int tier, 
             // double healing_power, double intellect, double spirit, double mp5, double mana, double spell_crit, bool available)
-            Item item(item_slot, item_name, source, drop_chance, unique, tier, healing_power, intellect, spirit, mp5, mana, spell_crit, available);
-            if (debug) item.PrintDetails();
-            // Store item
-            _data.push_back(item);
-            const Item* item_address = &(_data.back());
+            Item item(id, item_slot, item_name, source, drop_chance, unique, tier, healing_power, intellect, spirit, mp5, mana, spell_crit, available);
+            if (debug) item.PrintDetails(true);
             // Store reference to item in correct list
             if (item_slot == ItemSlot::HEAD) {
-                _head.push_back(item_address);
+                _head.emplace_back(item);
             } else if (item_slot == ItemSlot::NECK) {
-                _neck.push_back(item_address);
+                _neck.push_back(item);
             } else if (item_slot == ItemSlot::SHOULDERS) {
-                _shoulders.push_back(item_address);
+                _shoulders.push_back(item);
             } else if (item_slot == ItemSlot::BACK) {
-                _back.push_back(item_address);
+                _back.push_back(item);
             } else if (item_slot == ItemSlot::CHEST) {
-                _chest.push_back(item_address);
+                _chest.push_back(item);
             } else if (item_slot == ItemSlot::WRISTS) {
-                _wrists.push_back(item_address);
+                _wrists.push_back(item);
             } else if (item_slot == ItemSlot::WEAPON_2H) {
-                _weapon_2H.push_back(item_address);
+                _weapon_2H.push_back(item);
             } else if (item_slot == ItemSlot::WEAPON_MH) {
-                _weapon_MH.push_back(item_address);
+                _weapon_MH.push_back(item);
             } else if (item_slot == ItemSlot::WEAPON_OH) {
-                _weapon_OH.push_back(item_address);
+                _weapon_OH.push_back(item);
             } else if (item_slot == ItemSlot::WAND) {
-                _wand.push_back(item_address);
+                _wand.push_back(item);
             } else if (item_slot == ItemSlot::HANDS) {
-                _hands.push_back(item_address);
+                _hands.push_back(item);
             } else if (item_slot == ItemSlot::WAIST) {
-                _waist.push_back(item_address);
+                _waist.push_back(item);
             } else if (item_slot == ItemSlot::LEGS) {
-                _legs.push_back(item_address);
+                _legs.push_back(item);
             } else if (item_slot == ItemSlot::FEET) {
-                _feet.push_back(item_address);
+                _feet.push_back(item);
             } else if (item_slot == ItemSlot::FINGER) {
-                _finger.push_back(item_address);
+                _finger.push_back(item);
             } else if (item_slot == ItemSlot::TRINKET) {
-                _trinket.push_back(item_address);
+                _trinket.push_back(item);
             } else {
                 cout << "Wrong item slot type" << endl;
                 return false;
             }
-        } // Read by line
-
-        // Add "None" item for weapons
-        Item item_2h_none(ItemSlot::WEAPON_2H); 
-        _data.push_back(item_2h_none);
-        _weapon_2H.push_back(&item_2h_none);
-        Item item_mh_none(ItemSlot::WEAPON_MH);
-        _data.push_back(item_mh_none);
-        _weapon_MH.push_back(&item_mh_none);
-        Item item_oh_none(ItemSlot::WEAPON_OH);
-        _data.push_back(item_oh_none);
-        _weapon_OH.push_back(&item_oh_none);        
+        } // Read by line     
 
         return(true);
     };
@@ -463,6 +509,8 @@ public:
             cout << "Bad talents data file path!" << endl;
             _valid = false;
             return;
+        } else {
+            cout << "Reading Talents..." << endl;
         }
         string line;
         // Skip first line    
@@ -475,20 +523,40 @@ public:
             string value;
             while (getline(str_str, value,',')) {
                 if (cnt_csv == 0) {
+                    ++cnt_csv;
                     continue;
                 } else if (cnt_csv == 1) {
                     _talentTree.push_back(stoi(value));
+                    ++cnt_csv;
                 } else {
                     cout << "Malformed talents.csv" << endl;
                     _valid = false;
                     return;
-                }
-                ++cnt_csv;
+                }                
             }
         }
     }
 
     inline int getPoints(Talents talent) const { return( _talentTree[static_cast<int>(talent)] ); };
+    inline int getTalentTreeSize() const { return(_talentTree.size()); };
+
+    void PrintDetails() const {
+        cout << "TalentTree" << endl;
+        cout << "\t=== Discipline ===" << endl;
+        cout << "\tImproved Power Word: Shield: " << getPoints(Talents::IMPROVED_POWER_WORD_SHIELD) << " / 3" << endl;
+        cout << "\tMeditation: " << getPoints(Talents::MEDITATION) << " / 3" << endl;
+        cout << "\tMental Agility: " << getPoints(Talents::MENTAL_AGILITY) << " / 5" << endl;
+        cout << "\tMental Strength: " << getPoints(Talents::MENTAL_STRENGTH) << " / 5" << endl;
+        cout << "\t=== Holy ===" << endl;
+        cout << "\tImproved Renew: " << getPoints(Talents::IMPROVED_RENEW) << " / 3" << endl;
+        cout << "\tHoly Specialization: " << getPoints(Talents::HOLY_SPECIALIZATION) << " / 5" << endl;
+        cout << "\tDivine Fury: " << getPoints(Talents::DIVINE_FURY) << " / 5" << endl;
+        cout << "\tImproved Healing: " << getPoints(Talents::IMPROVED_HEALING) << " / 3" << endl;
+        cout << "\tSpiritual Guidance: " << getPoints(Talents::SPIRITUAL_GUIDANCE) << " / 5" << endl;
+        cout << "\tSpiritual Healing: " << getPoints(Talents::SPIRITUAL_HEALING) << " / 5" << endl;
+
+        return;
+    }
 };
 
 enum class SpellName {
@@ -601,9 +669,9 @@ public:
     vector<Spell> _spellBook;
 
     SpellBook(): _spellBook() {};
-    SpellBook(const TalentTree& talents, double spell_crit, double healing_power, bool T1_3PC, bool T2_8PC) {
+    SpellBook(const TalentTree& talents, double spell_crit, double healing_power, bool T1_3PC, bool T2_8PC, bool debug) {
         // Initialize base priest spells
-        //const SpellNameRank spell_name_enum,const string& spell_name, int spell_rank, int level, double base_cast_time, double base_mana_cost, double base_healing
+        _spellBook.clear();
         _spellBook.emplace_back(SpellNameRank::LESSER_HEAL_R1,SpellName::LESSER_HEAL,"Lesser Heal (Rank 1)", 1, 1, 1.5, 30.0, 53.0);
         _spellBook.emplace_back(SpellNameRank::LESSER_HEAL_R2,SpellName::LESSER_HEAL,"Lesser Heal (Rank 2)", 2, 4, 2.0, 45.0, 84.0);
         _spellBook.emplace_back(SpellNameRank::LESSER_HEAL_R3,SpellName::LESSER_HEAL,"Lesser Heal (Rank 3)", 3, 10, 2.5, 75.0, 154.0);
@@ -623,17 +691,25 @@ public:
         _spellBook.emplace_back(SpellNameRank::FLASH_HEAL_R6,SpellName::FLASH_HEAL,"Flash Heal (Rank 6)", 6, 50, 1.5, 315.0, 723.0);
         _spellBook.emplace_back(SpellNameRank::FLASH_HEAL_R7,SpellName::FLASH_HEAL,"Flash Heal (Rank 7)", 7, 56, 1.5, 380.0, 902.0);  
 
+        if (debug) cout << "Base spells initialized" << endl;
+
         // Determine effective stats
-        for (Spell spell : _spellBook) {
+        if (debug) cout << "Starting spell loop" << endl;
+        for (Spell& spell : _spellBook) {
+            if (debug) cout << spell << endl;
             // Calculate Effective Cast Time
             double effective_cast_time = spell.getBaseCastTime();
+            if (debug) cout << "effective_cast_time: " << effective_cast_time << endl;
             if ( (spell.getSpellNameEnum() == SpellName::HEAL) || (spell.getSpellNameEnum() == SpellName::GREATER_HEAL) ) {
                 effective_cast_time -= 0.1*talents.getPoints(Talents::DIVINE_FURY);
             }
+            if (debug) cout << "effective_cast_time: " << effective_cast_time << endl;
             if ( T1_3PC && (spell.getSpellNameEnum() == SpellName::FLASH_HEAL) ) {
                 effective_cast_time -= 0.1;
             }
+            if (debug) cout << "effective_cast_time: " << effective_cast_time << endl;
             spell.setEffectiveCastTime(effective_cast_time);
+            if (debug) cout << "spell.getEffectiveCastTime(): " << spell.getEffectiveCastTime() << endl;
 
             // Calculate Effective Mana Cost
             double mana_cost = spell.getBaseManaCost();
@@ -652,7 +728,9 @@ public:
             double healing = spell.getBaseHealing() + effective_coefficient*healing_power;
             double healing_with_crit = healing*(1.0 + 0.5*spell.getCrit());
             spell.setEffectiveHealing(healing_with_crit*(1.0 + 0.02*talents.getPoints(Talents::SPIRITUAL_HEALING)));
-        } 
+        }
+
+        if (debug) cout << "_spellBook[0].getEffectiveCastTime(): " << _spellBook[0].getEffectiveCastTime() << endl;
     }
 
     inline Spell getSpell(const SpellNameRank spell_name) const { return( _spellBook[static_cast<int>(spell_name)] ); };
@@ -662,7 +740,7 @@ public:
 class Priest {
 private:
     TalentTree _talents;
-    vector<const Item*> _gearSet;
+    vector<Item> _gearSet;
     SpellBook _spellBook;
     double _healingPower, _intellect, _spirit, _maxMana, _spellCrit, _mp5_gear, _mp5_spirit, _mp5_casting;
     // Tier bonuses
@@ -674,10 +752,15 @@ private:
     Spell _fastThroughput_Spell;
     double _maxThroughput; // Best average HpS over whole encounter for all spells
     Spell _maxThroughput_Spell;
+    double _healingScore; //_peakHps + _fastThroughput + _maxThroughput_Spell
 
-    void _GearSwap(vector<const Item*> gear_set) {
-        _gearSet = gear_set;
+    void _GearSwap(const vector<Item>& gear_set,bool debug) {
+        _gearSet.clear();
+        for (Item item : gear_set) {
+            _gearSet.push_back(item);
+        }
 
+        if (debug) cout << "gear set" << endl;
         // Initialize stats with base amounts
         _healingPower = 0;
         _intellect = 116;
@@ -695,25 +778,26 @@ private:
 
         // Calculate stats gained from gear and check tier bonuses
         double healing_power_gear = 0, int_gear = 0, spi_gear = 0, mana_gear = 0, spell_crit_gear = 0;
-        for (const Item* gear : _gearSet) {
-            healing_power_gear += gear->getHealingPower();
-            int_gear += gear->getIntellect();
-            spi_gear += gear->getSpirit();
-            mana_gear += gear->getMana();
-            spell_crit_gear += gear->getSpellCrit();
-            _mp5_gear += gear->getMp5();
-            if (gear->getTier() == 1) ++T1_cnt;
-            if (gear->getTier() == 2) ++T2_cnt;
-        }
+        for (const Item gear : _gearSet) {
+            healing_power_gear += gear.getHealingPower();
+            int_gear += gear.getIntellect();
+            spi_gear += gear.getSpirit();
+            mana_gear += gear.getMana();
+            spell_crit_gear += gear.getSpellCrit();
+            _mp5_gear += gear.getMp5();
+            if (gear.getTier() == 1) ++T1_cnt;
+            if (gear.getTier() == 2) ++T2_cnt;
+        }        
         _T1_3PC = T1_cnt >= 3;
         _T1_5PC = T1_cnt >= 5;
         _T2_3PC = T2_cnt >= 3;
         _T2_8PC = T2_cnt >= 8;
+        if (debug) cout << "gear stats calculated" << endl;
 
         // Calculate final attributes
         _intellect += int_gear;
         _spirit += spi_gear;
-        _healingPower = healing_power_gear + _talents.getPoints(Talents::SPIRITUAL_GUIDANCE)*0.05*_spirit;
+        _healingPower = healing_power_gear + _talents.getPoints(Talents::SPIRITUAL_GUIDANCE)*0.05*_spirit;     
         if (_T1_5PC) _spellCrit += 0.02;
         _spellCrit += _intellect/5950.0 + _talents.getPoints(Talents::HOLY_SPECIALIZATION)*0.01;
         _maxMana += 15*_intellect + mana_gear;
@@ -722,6 +806,7 @@ private:
         double casting_regen_coefficient = _talents.getPoints(Talents::MEDITATION)*0.05;
         if (_T2_3PC) casting_regen_coefficient += 0.15;
         _mp5_casting = _mp5_gear + _mp5_spirit*casting_regen_coefficient;
+        if (debug) cout << "final attributes calculated" << endl;
 
         return;
     }
@@ -730,54 +815,28 @@ public:
     Priest(): _talents(), _gearSet(), _spellBook(), 
     _healingPower(0.0), _intellect(0.0), _spirit(0.0), _maxMana(0.0), _spellCrit(0.0), _mp5_gear(0.0), _mp5_spirit(0.0), _mp5_casting(0.0),
     _T1_3PC(false), _T1_5PC(false), _T2_3PC(false), _T2_8PC(false),
-    _peakHps(0.0), _peakHpS_Spell(), _fastThroughput(0.0), _fastThroughput_Spell(), _maxThroughput(0.0), _maxThroughput_Spell() {};
+    _peakHps(0.0), _peakHpS_Spell(), _fastThroughput(0.0), _fastThroughput_Spell(), _maxThroughput(0.0), _maxThroughput_Spell(), _healingScore(0.0) {};
 
-    void GearSwap(const vector<const Item*>& gear_set) {
+    void GearSwap(const vector<Item>& gear_set, bool debug) {
+        if (debug) cout << "GearSwap Enter" << endl;
         // Calculate stats from gear
-        _GearSwap(gear_set);
+        _GearSwap(gear_set,debug);
 
         // Calculate spells
-        _spellBook = SpellBook(_talents, _spellCrit, _healingPower, _T1_3PC, _T2_8PC);
+        _spellBook = SpellBook(_talents, _spellCrit, _healingPower, _T1_3PC, _T2_8PC, debug);
+        
+        if (debug) cout << "GearSwap Exit" << endl;
         return;
     }
 
-    //     TalentTree _talents;
-    // vector<const Item*> _gearSet;
-    // SpellBook _spellBook;
-    // double , , , , , , , ;
-    // // Tier bonuses
-    //  , , , ;
-    // // Quantities to maximize
-    // double ; // Peak HpS possible
-    //  ;
-    // double ; // Best average HpS over whole encounter for spell cast time 2s or less
-    // Spell ;
-    // double ; // Best average HpS over whole encounter for all spells
-    // Spell ;
-
-    // inline double get() const { return(_healingPower); };
-    // inline double get() const { return(_intellect); };
-    // inline double get() const { return(_spirit); };
-    // inline double get() const { return(_maxMana); };
-    // inline double get() const { return(_spellCrit); };
-    // inline double get() const { return(_mp5_gear); };
-    // inline double get() const { return(_mp5_spirit); };
-    // inline double get() const { return(_mp5_casting); };
-    // inline bool get() const { return(_T1_3PC); };
-    // inline bool get() const { return(_T1_5PC); };
-    // inline bool get() const { return(_T2_3PC); };
-    // inline bool get() const { return(_T2_8PC); };
-    // inline double get() const { return(_peakHps); };
-    // inline Spell get() const { return(_peakHpS_Spell); };
-    // inline double get() const { return(_fastThroughput); };
-    // inline Spell get() const { return(_fastThroughput_Spell); };
-    // inline double get() const { return(_maxThroughput); };
-    // inline Spell get() const { return(_maxThroughput_Spell); };
-    // inline double get() const { return(); };
-
     friend ostream & operator << (ostream& out, const Priest& priest); 
 
-    double HealingOptimization(double duration) {
+    void PrintTalentTree() const {
+        _talents.PrintDetails();
+        return;
+    }
+
+    double HealingOptimization(double duration, bool debug) {
         // Initialize
         double GCD = 1.5;
         _peakHps = 0.0;
@@ -786,14 +845,20 @@ public:
         _fastThroughput_Spell = Spell();
         _maxThroughput = 0.0;
         _maxThroughput_Spell = Spell();
+        _healingScore = 0.0;
 
         // Calculate amount of mana to spend
-        double total_mana = _maxMana + _mp5_casting*duration;
+        double total_mana = _maxMana + _mp5_casting*duration/5;
+        if (debug) cout << "total_mana: " << total_mana << endl;
         // Loop through all spells to calculate max healing
         vector<double> spell_hps;
+        if (debug) cout << "Starting spell loop" << endl;
         for (Spell spell : _spellBook._spellBook) {
+            if (debug) cout << spell << endl;
             // Determine peak HpS
             double peak_hps_tmp = spell.getEffectiveHealing()/spell.getEffectiveCastTime();
+            if (debug) cout << "peak_hps_tmp: " << peak_hps_tmp << endl;
+
             if (peak_hps_tmp > _peakHps) {
                 _peakHps = peak_hps_tmp;
                 _peakHpS_Spell = spell;
@@ -820,7 +885,7 @@ public:
             Spell spell = _spellBook._spellBook[i];
 
             // Fast healing throughput
-            if ( (spell.getEffectiveCastTime() <- 2.0) && (spell_hps[i] > _fastThroughput) ) {
+            if ( (spell.getEffectiveCastTime() <= 2.0) && (spell_hps[i] > _fastThroughput) ) {
                 _fastThroughput = spell_hps[i];
                 _fastThroughput_Spell = spell;
             }
@@ -832,29 +897,31 @@ public:
             }
         }
 
-        return (_peakHps + _fastThroughput + _maxThroughput);
+        _healingScore = _peakHps + _fastThroughput + _maxThroughput;
+        return (_healingScore);
     }
 };
 
 ostream & operator << (ostream& out, const Priest& priest) {
     cout << "Priest State:" << endl;
-    cout << "\tHealing Power:" << priest._healingPower << endl;
-    cout << "\tIntellect:" << priest._intellect << endl;
-    cout << "\tSpirit:" << priest._spirit << endl;
-    cout << "\tMax Mana:" << priest._maxMana << endl;
-    cout << "\tMp5 (spirit):" << priest._mp5_spirit << endl;
-    cout << "\tMp5 (gear):" << priest._mp5_gear << endl;
-    cout << "\tMp5 (casting):" << priest._mp5_casting << endl;
-    cout << "\tTier 1 - 3 Piece Bonus:" << priest._T1_3PC << endl;
-    cout << "\tTier 1 - 5 Piece Bonus:" << priest._T1_5PC << endl;
-    cout << "\tTier 2 - 3 Piece Bonus:" << priest._T2_3PC << endl;
-    cout << "\tTier 2 - 8 Piece Bonus:" << priest._T2_8PC << endl;
-    cout << "\tPeak HpS:" << priest._peakHps << endl;
-    cout << "\tPeak HpS Spell:" << priest._peakHpS_Spell << endl;
-    cout << "\tMax Throughput HpS (fast):" << priest._fastThroughput << endl;
-    cout << "\tMax Throughput HpS (fast) Spell:" << priest._fastThroughput_Spell << endl;
-    cout << "\tMax Throughput HpS:" << priest._maxThroughput << endl;
-    cout << "\tMax Throughput HpS Spell:" << priest._maxThroughput_Spell << endl;
+    cout << "\tHealing Power: " << priest._healingPower << endl;
+    cout << "\tIntellect: " << priest._intellect << endl;
+    cout << "\tSpirit: " << priest._spirit << endl;
+    cout << "\tMax Mana: " << priest._maxMana << endl;
+    cout << "\tMp5 (spirit): " << priest._mp5_spirit << endl;
+    cout << "\tMp5 (gear): " << priest._mp5_gear << endl;
+    cout << "\tMp5 (casting): " << priest._mp5_casting << endl;
+    cout << "\tTier 1 - 3 Piece Bonus: " << priest._T1_3PC << endl;
+    cout << "\tTier 1 - 5 Piece Bonus: " << priest._T1_5PC << endl;
+    cout << "\tTier 2 - 3 Piece Bonus: " << priest._T2_3PC << endl;
+    cout << "\tTier 2 - 8 Piece Bonus: " << priest._T2_8PC << endl;
+    cout << "\tPeak HpS: " << priest._peakHps << endl;
+    cout << "\tPeak HpS Spell: " << priest._peakHpS_Spell << endl;
+    cout << "\tMax Throughput HpS (fast): " << priest._fastThroughput << endl;
+    cout << "\tMax Throughput HpS (fast) Spell: " << priest._fastThroughput_Spell << endl;
+    cout << "\tMax Throughput HpS: " << priest._maxThroughput << endl;
+    cout << "\tMax Throughput HpS Spell: " << priest._maxThroughput_Spell << endl;
+    cout << "\tHealing Score: " << priest._healingScore << endl;
     return out;
 }
 
@@ -915,79 +982,137 @@ int main() {
     // Instantiate Priest
     if (verbose) cout << "Initializing Priest" << endl;
     Priest priest;
+    if (verbose) priest.PrintTalentTree();
 
-    // Loop over every possible gear combination
+    // Loop over every possible gear combination    
     if (verbose) cout << "Starting Optimization" << endl;
-    vector< tuple< double , vector<const Item*> > > opt_list;
-    //const Item* head : gear._head
-    for (int i_head = 0, N_head = gear._head.size(); i_head < N_head; ++i_head) {
-        const Item* head = gear._head[i_head];
-        if (verbose) head->PrintDetails();
-        for (int i_neck = 0, N_neck = gear._neck.size(); i_neck < N_neck; ++i_neck) {
-            const Item* neck = gear._neck[i_neck];
-            if (verbose) neck->PrintDetails();
-            for (int i_shoulders = 0, N_shoulders = gear._shoulders.size(); i_shoulders < N_shoulders; ++i_shoulders) {
-                for (int i_back = 0, N_back = gear._back.size(); i_back < N_back; ++i_back) {
-                    for (int i_chest = 0, N_chest = gear._chest.size(); i_chest < N_chest; ++i_chest) {
-                        for (int i_wrists = 0, N_wrists = gear._wrists.size(); i_wrists < N_wrists; ++i_wrists) {
-                            for (int i_wand = 0, N_wand = gear._wand.size(); i_wand < N_wand; ++i_wand) {
-                                for (int i_hands = 0, N_hands = gear._hands.size(); i_hands < N_hands; ++i_hands) {
-                                    for (int i_waist = 0, N_waist = gear._waist.size(); i_waist < N_waist; ++i_waist) {
-                                        for (int i_legs = 0, N_legs = gear._legs.size(); i_legs < N_legs; ++i_legs) {
-                                            for (int i_feet = 0, N_feet = gear._feet.size(); i_feet < N_feet; ++i_feet) {
-                                                for (int i_finger_1 = 0, N_finger_1 = gear._finger.size(); i_finger_1 < N_finger_1; ++i_finger_1) {
-                                                    for (int i_finger_2 = 0, N_finger_2 = gear._finger.size(); i_finger_2 < N_finger_2; ++i_finger_2) {
-                                                        // Check if need to skip finger_2 (skip when duplicate item and item is not unique)
-                                                        if ( !gear._finger[i_finger_2]->getUnique() && ( gear._finger[i_finger_1]->getName().compare(gear._finger[i_finger_2]->getName()) == 0) ) continue;
-                                                        for (int i_trinket_1 = 0, N_trinket_1 = gear._trinket.size(); i_trinket_1 < N_trinket_1; ++i_trinket_1) {
-                                                            for (int i_trinket_2 = 0, N_trinket_2 = gear._trinket.size(); i_trinket_2 < N_trinket_2; ++i_trinket_2) {
-                                                                // Check if need to skip trinket_2 (skip when duplicate item and item is not unique)
-                                                                if ( !gear._finger[i_trinket_2]->getUnique() && ( gear._finger[i_trinket_1]->getName().compare(gear._finger[i_trinket_2]->getName()) == 0) ) continue;
-                                                                for (int i_weapon_2H = 0, N_weapon_2H = gear._weapon_2H.size(); i_weapon_2H < N_weapon_2H; ++i_weapon_2H) {
+    auto start_time = chrono::steady_clock::now();
+    vector< tuple< double , vector<Item> > > opt_list;
+    for (int i_head = 0, N_head = gear.getHeadSize(); i_head < N_head; ++i_head) {
+        Item head = gear.getHeadItem(i_head);
 
-                                                                    if (gear._weapon_2H[i_weapon_2H]->getName().compare("None") == 0) {
+        for (int i_neck = 0, N_neck = gear.getNeckSize(); i_neck < N_neck; ++i_neck) {
+            Item neck = gear.getNeckItem(i_neck);
+
+            for (int i_shoulders = 0, N_shoulders = gear.getShouldersSize(); i_shoulders < N_shoulders; ++i_shoulders) {
+                Item shoulders = gear.getShouldersItem(i_shoulders);
+
+                for (int i_back = 0, N_back = gear.getBackSize(); i_back < N_back; ++i_back) {
+                    Item back = gear.getBackItem(i_back);
+
+                    for (int i_chest = 0, N_chest = gear.getChestSize(); i_chest < N_chest; ++i_chest) {
+                        Item chest = gear.getChestItem(i_chest);
+
+                        for (int i_wrists = 0, N_wrists = gear.getWristsSize(); i_wrists < N_wrists; ++i_wrists) {
+                            Item wrists = gear.getWristsItem(i_wrists);
+
+                            for (int i_wand = 0, N_wand = gear.getWandSize(); i_wand < N_wand; ++i_wand) {
+                                Item wand = gear.getWandItem(i_wand);
+
+                                for (int i_hands = 0, N_hands = gear.getHandsSize(); i_hands < N_hands; ++i_hands) {
+                                    Item hands = gear.getHandsItem(i_hands);
+
+                                    for (int i_waist = 0, N_waist = gear.getWaistSize(); i_waist < N_waist; ++i_waist) {
+                                        Item waist = gear.getWaistItem(i_waist);
+
+                                        for (int i_legs = 0, N_legs = gear.getLegsSize(); i_legs < N_legs; ++i_legs) {
+                                            Item legs = gear.getLegsItem(i_legs);
+
+                                            for (int i_feet = 0, N_feet = gear.getFeetSize(); i_feet < N_feet; ++i_feet) {
+                                                Item feet = gear.getFeetItem(i_feet);
+
+                                                for (int i_finger_1 = 0, N_finger_1 = gear.getFingerSize(); i_finger_1 < N_finger_1; ++i_finger_1) {
+                                                    Item finger_1 = gear.getFingerItem(i_finger_1);
+
+                                                    for (int i_finger_2 = 0, N_finger_2 = gear.getFingerSize(); i_finger_2 < N_finger_2; ++i_finger_2) {                                                     
+                                                        Item finger_2 = gear.getFingerItem(i_finger_2);                                                  
+                                                        // Check if need to skip finger_2 (skip when duplicate item and item is unique)
+                                                        if ( finger_2.getUnique() && (finger_1.getID() == finger_2.getID()) ) continue;
+
+                                                        for (int i_trinket_1 = 0, N_trinket_1 = gear.getTrinketSize(); i_trinket_1 < N_trinket_1; ++i_trinket_1) {
+                                                            Item trinket_1 = gear.getTrinketItem(i_trinket_1);
+
+                                                            for (int i_trinket_2 = 0, N_trinket_2 = gear.getTrinketSize(); i_trinket_2 < N_trinket_2; ++i_trinket_2) {
+                                                                Item trinket_2 = gear.getTrinketItem(i_trinket_2);                                                            
+                                                                // Check if need to skip trinket_2 (skip when duplicate item and item is unique)
+                                                                if ( trinket_2.getUnique() && (trinket_1.getID() == trinket_2.getID()) ) continue;
+                                                                
+                                                                for (int i_weapon_2H = 0, N_weapon_2H = gear.getWeapon2HSize(); i_weapon_2H < N_weapon_2H; ++i_weapon_2H) {
+                                                                    Item weapon_2H = gear.getWeapon2HItem(i_weapon_2H);
+
+                                                                    // Check if 2H is "None"
+                                                                    if (weapon_2H.getID() == -1) {
                                                                         // MH + OH
-                                                                        for (int i_weapon_MH = 0, N_weapon_MH = gear._weapon_MH.size(); i_weapon_MH < N_weapon_MH; ++i_weapon_MH) {
-                                                                            for (int i_weapon_OH = 0, N_weapon_OH = gear._weapon_OH.size(); i_weapon_OH < N_weapon_OH; ++i_weapon_OH) {
-                                                                                // Assemble gear list
-                                                                                vector<const Item*> gear_set;
-                                                                                gear_set.push_back(gear._head[i_head]);
-                                                                                gear_set.push_back(gear._neck[i_neck]);
-                                                                                gear_set.push_back(gear._shoulders[i_shoulders]);
-                                                                                gear_set.push_back(gear._back[i_back]);
-                                                                                gear_set.push_back(gear._chest[i_chest]);
-                                                                                gear_set.push_back(gear._wrists[i_wrists]);
-                                                                                gear_set.push_back(gear._wand[i_wand]);
-                                                                                gear_set.push_back(gear._hands[i_hands]);
-                                                                                gear_set.push_back(gear._waist[i_waist]);
-                                                                                gear_set.push_back(gear._legs[i_legs]);
-                                                                                gear_set.push_back(gear._feet[i_feet]);
-                                                                                gear_set.push_back(gear._finger[i_finger_1]);
-                                                                                gear_set.push_back(gear._finger[i_finger_2]);
-                                                                                gear_set.push_back(gear._trinket[i_trinket_1]);
-                                                                                gear_set.push_back(gear._trinket[i_trinket_2]);
-                                                                                gear_set.push_back(gear._weapon_MH[i_weapon_MH]);
-                                                                                gear_set.push_back(gear._weapon_OH[i_weapon_OH]);
 
-                                                                                // Update priest gear                                                                    
-                                                                                priest.GearSwap(gear_set);
+                                                                        for (int i_weapon_MH = 0, N_weapon_MH = gear.getWeaponMHSize(); i_weapon_MH < N_weapon_MH; ++i_weapon_MH) {
+                                                                            Item weapon_MH = gear.getWeaponMHItem(i_weapon_MH);
+
+                                                                            for (int i_weapon_OH = 0, N_weapon_OH = gear.getWeaponOHSize(); i_weapon_OH < N_weapon_OH; ++i_weapon_OH) {
+                                                                                Item weapon_OH = gear.getWeaponOHItem(i_weapon_OH);                                                                                
+
+                                                                                // Assemble gear list
+                                                                                vector<Item> gear_set;
+                                                                                gear_set.push_back(head);
+                                                                                gear_set.push_back(neck);
+                                                                                gear_set.push_back(shoulders);
+                                                                                gear_set.push_back(back);
+                                                                                gear_set.push_back(chest);
+                                                                                gear_set.push_back(wrists);
+                                                                                gear_set.push_back(wand);
+                                                                                gear_set.push_back(hands);
+                                                                                gear_set.push_back(waist);
+                                                                                gear_set.push_back(legs);
+                                                                                gear_set.push_back(feet);
+                                                                                gear_set.push_back(finger_1);
+                                                                                gear_set.push_back(finger_2);
+                                                                                gear_set.push_back(trinket_1);
+                                                                                gear_set.push_back(trinket_2);
+                                                                                gear_set.push_back(weapon_2H);
+                                                                                gear_set.push_back(weapon_MH);
+                                                                                gear_set.push_back(weapon_OH);
+
+                                                                                // Update priest gear                                                               
+                                                                                priest.GearSwap(gear_set,false);
 
                                                                                 // Determine optimal healing output
-                                                                                double healing = priest.HealingOptimization(duration);
+                                                                                double healing = priest.HealingOptimization(duration,false);
 
                                                                                 // Push to priority queue
-                                                                                opt_list.emplace_back(healing,gear_set);
-
-                                                                                // Check
-                                                                                cout << priest << endl;
-                                                                                
-                                                                                break;
-                                                                                
+                                                                                opt_list.emplace_back(healing,gear_set);                                                                               
                                                                             } // weapon_OH
                                                                         } // weapon_MH
                                                                     } else {
                                                                         // 2H weapon
 
+                                                                        // Assemble gear list
+                                                                        vector<Item> gear_set;
+                                                                        gear_set.push_back(head);
+                                                                        gear_set.push_back(neck);
+                                                                        gear_set.push_back(shoulders);
+                                                                        gear_set.push_back(back);
+                                                                        gear_set.push_back(chest);
+                                                                        gear_set.push_back(wrists);
+                                                                        gear_set.push_back(wand);
+                                                                        gear_set.push_back(hands);
+                                                                        gear_set.push_back(waist);
+                                                                        gear_set.push_back(legs);
+                                                                        gear_set.push_back(feet);
+                                                                        gear_set.push_back(finger_1);
+                                                                        gear_set.push_back(finger_2);
+                                                                        gear_set.push_back(trinket_1);
+                                                                        gear_set.push_back(trinket_2);
+                                                                        gear_set.push_back(weapon_2H);
+                                                                        gear_set.emplace_back(-1,ItemSlot::WEAPON_MH);
+                                                                        gear_set.emplace_back(-1,ItemSlot::WEAPON_OH);
+
+                                                                        // Update priest gear                                                               
+                                                                        priest.GearSwap(gear_set,false);
+
+                                                                        // Determine optimal healing output
+                                                                        double healing = priest.HealingOptimization(duration,false);
+
+                                                                        // Push to priority queue
+                                                                        opt_list.emplace_back(healing,gear_set);
                                                                     }
 
                                                                 } // weapon_2H
@@ -1007,11 +1132,31 @@ int main() {
         } // neck
     } // head
 
-    cout << "Done!" << endl;
+    auto end_time = chrono::steady_clock::now();
+    cout << endl << "Processed " << opt_list.size() << " gear sets in " << chrono::duration_cast<chrono::microseconds>(end_time - start_time).count() << " micro secs" << endl << endl;
+
+    // Sort list
+    struct less_than_struct {
+        inline bool operator() (const tuple< double , vector<Item> >& val1, const tuple< double , vector<Item> >& val2) {
+            // The value returned indicates whether the element passed as first argument is considered to go before the second
+            // Ascending = <
+            return (get<0>(val1) > get<0>(val2));
+        }
+    };
+    sort(opt_list.begin(),opt_list.end(),less_than_struct());
+
+    // Print top 3 sets
+    cout << "======================" << endl << "===== TOP 3 SETS =====" << endl << "======================" << endl << endl;
+    for (int i = 0; i < 3; ++i) {
+        cout << "-------------" << endl << "--- SET " << i+1 << " ---" << endl << "-------------" << endl;
+        tuple< double , vector<Item> > tuple_tmp = opt_list[i];
+        vector<Item> gear_set = get<1>(tuple_tmp);
+        priest.GearSwap(gear_set,false);
+        priest.HealingOptimization(duration,false);
+        cout << priest << endl;
+        // Print actual gear set
+        for (Item gear : gear_set) gear.PrintDetails(false);
+        cout << endl;
+    }
     return 0;
 } 
-
-// void ReadGearData
-
-
-
