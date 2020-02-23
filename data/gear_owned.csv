@@ -4,40 +4,36 @@ finger,Cauterizing Band,Majordomo Executus,0.21,0,46,12,0,0,0,0.00,TRUE,FALSE
 finger,Seal of Rivendare,Bank,1.0,0,0,17,7,0,0,0.00,TRUE,FALSE
 finger,Fordring's Seal,Quest,1.00,0,37,5,0,0,0,0.00,TRUE,TRUE
 finger,Eye of Orgrimmar,Quest,1.00,0,18,7,4,0,0,0.00,TRUE,TRUE
-trinket,Rejuvenating Gem,3 Drakes,0.10,0,66.0,0.0,0.0,9.0,0.0,0.00,FALSE,TRUE
-trinket,Shard of the Scale,Onyxia,0.06,0,0.0,0.0,0.0,16.0,0.0,0.00,FALSE,TRUE
+trinket,Royal Seal of Eldre'Thalas,Quest,1.00,0,33.0,0.0,0.0,4.0,0.0,0.00,TRUE,TRUE
+trinket,Second Wind,Golem Lord Argelmach,0.09,0,22.0,0.0,0.0,1.7,0.0,0.00,TRUE,TRUE
 trinket,Blessed Prayer Beads,Quest (ST),1.00,0,31.7,0.0,0.0,0.0,0.0,0.00,TRUE,TRUE
-trinket,Mindtap Talisman,Magister Kalendris,0.09,0,0.0,0.0,0.0,11.0,0.0,0.00,TRUE,FALSE
 head,Halo of Transcendence,Onyxia,1.00,2,48,27,22,0,0,0.00,TRUE,TRUE
 neck,Animated Chain Necklace,Ramstein the Gorger,0.12,0,33,0,6,0,0,0.00,TRUE,TRUE
-neck,Pendant of the Fallen Dragon,Vaelastrasz the Corrupt,0.31,0,0,12,0,9,0,0.00,FALSE,TRUE
+neck,Frostwolf Advisor's Pendant,Frostwolf Clan (Honored),1.00,0,0,10,0,4,0,0.00,TRUE,TRUE
 neck,Darkmoon Necklace,Darmoon Faire,1.00,0,0,6,0,6,0,0.00,TRUE,TRUE
-shoulders,Pauldrons of Transcendence,Chromaggus,0.13,2,26,25,13,0,0,0.00,FALSE,TRUE
 shoulders,Mantle of the Timbermaw,Tailoring,1.00,0,0,21,0,6,0,0.00,TRUE,TRUE
 shoulders,Mantle of Prophecy,Sulfuron Harbinger,0.13,1,9,23,10,0,0,0.00,TRUE,TRUE
-back,Shroud of Pure Thought,Flamegor,0.13,0,33,11,0,6,0,0.00,FALSE,TRUE
+shoulders,Elder Wizard's Mantle,World Drop,1.00,0,11,20,0,0,0,0.00,TRUE,TRUE
+shoulders,Kentic Amice,High Interrogator Gerstahn,0.38,0,14,13,6,0,0,0.00,TRUE,TRUE
 back,Hide of the Wild,Crafting,1.00,0,42,10,0,0,0,0.00,TRUE,TRUE
+back,Archivist Cape (of the Owl),Bank,1.00,0,0,9,9,4,0,0.00,TRUE,TRUE
 back,Faded Hakkari Cloak,Bank,1.00,0,0,8,0,6,0,0.00,TRUE,TRUE
-chest,Robes of Transcendence,Nefarian,0.13,2,57,27,16,0,0,0.00,FALSE,TRUE
+back,Spritecaster Cape,Bank,1.00,0,14,4,5,0,0,0.00,TRUE,TRUE
 chest,Robes of Prophecy,Golemagg the Incinerator,0.13,1,22,27,17,0,0,0.00,TRUE,TRUE
 chest,Truefaith Vestments,Crafting,1.00,0,73,0,0,6,0,0.00,TRUE,TRUE
+chest,Robes of the Exalted,Baron Rivendare,0.14,0,68,5,11,0,0,0.00,TRUE,TRUE
 wrists,Vambraces of Prophecy,MC Trash,0.07,1,24,14,10,2,0,0.00,TRUE,TRUE
 wrists,Bindings of Transcendence,Razorgore the Untamed,0.13,2,33,13,16,0,0,0.00,FALSE,TRUE
+wrists,Flameweave Cuffs (of Healing),Bank,1.00,0,33,0,0,0,0,0.00,TRUE,TRUE
 weapon 2H,Benediction,Class Quest,1.00,0,106,31,12,0,0,0.02,TRUE,TRUE
-wand,Essence Gatherer,BWL Trash,0.03,0,0,7,0,5,0,0.00,FALSE,TRUE
-wand,Wizard's Hand (of Healing),World Drop,1.00,0,15,0,0,0,0,0.00,TRUE,TRUE
-wand,Mana Channeling Wand,Cho'Rush the Observer,0.43,0,0,0,0,4,0,0.00,TRUE,TRUE
 wand,Crimson Shocker,MC Trash,0.01,0,0,10,0,0,0,0.00,TRUE,TRUE
+wand,Wizard's Hand (of Healing),World Drop,1.00,0,15,0,0,0,0,0.00,TRUE,TRUE
+wand,Regal Star of the Owl,AH,1.0,0,0,6,7,0,0,0.00,TRUE,TRUE
 hands,Gloves of Prophecy,Gehennas,0.32,1,18,15,15,6,0,0.00,TRUE,TRUE
-hands,Handguards of Transcendence,3 Drakes,0.15,2,29,20,13,0,0,0.01,FALSE,TRUE
 hands,Hands of the Exalted Herald,Princess Moira Bronzebeard,0.23,0,33,13,12,0,0,0.00,TRUE,TRUE
-waist,Belt of Transcendence,Vaelastrasz the Corrupt,0.23,2,26,26,9,0,0,0.00,FALSE,TRUE
+hands,Gloves of Rapid Evolution,Razorgore the Untamed,0.15,0,0,12,32,0,0,0.00,FALSE,TRUE
+hands,High Councillor's Gloves,World Drop,0.01,0,46,0,0,0,0,0.00,TRUE,TRUE
 waist,Whipvine Cord,Alzzin the Wildshaper,0.19,0,31,9,0,6,0,0.00,TRUE,TRUE
 waist,Girdle of Prophecy,MC Trash,0.13,1,9,22,10,4,0,0.00,TRUE,TRUE
-legs,Leggings of Transcendence,Ragnaros,0.13,2,46,21,21,7,0,0.00,FALSE,TRUE
-legs,Empowered Leggings,Chromaggus,0.12,0,77,12,24,0,0,0.01,FALSE,TRUE
-legs,Pants of Prophecy,Magmadar,0.12,1,22,24,20,6,0,0.00,TRUE,TRUE
-feet,Boots of Pure Thought,BWL Trash,0.01,0,62,12,12,0,0,0.00,FALSE,TRUE
-feet,Boots of Transcendence,Broodlord Lashlayer,0.13,2,35,17,17,0,0,0.00,FALSE,TRUE
-feet,Shimmering Geta,Chromaggus,0.24,0,0,17,0,12,0,0.00,FALSE,TRUE
+legs,Padre's Trousers,Illyanna Ravenoak,0.22,0,42,20,0,6,0,0.00,TRUE,TRUE
 feet,Boots of Prophecy,Shazzrah,0.13,1,18,18,15,0,0,0.00,TRUE,TRUE
