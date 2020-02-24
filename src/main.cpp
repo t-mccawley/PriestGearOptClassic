@@ -295,7 +295,7 @@ public:
         // Read data from CSV
         // Return validity
 
-        ifstream file ( "../data/gear.csv" ); // declare file stream: http://www.cplusplus.com/reference/iostream/ifstream/
+        ifstream file ( "../data/gear_owned.csv" ); // declare file stream: http://www.cplusplus.com/reference/iostream/ifstream/
         if (!file.good()) {
             std::cout << "Bad gear data file path!" << std::endl;
             return false;
@@ -795,6 +795,14 @@ private:
         _T2_8PC = false;
         int T1_cnt = 0, T2_cnt = 0;
 
+        // Add buffs
+        _intellect += 30.0; // Arcane Intellect
+        _intellect += 12.0; // Mark of the Wild
+        _spirit += 40.0; // Divine Spirit
+        _spirit += 12.0; // Mark of the Wild
+        _mp5_casting += 8.0; // Nightfin Soup
+        _maxMana += 800.0; //Greater Mana Potion
+
         // Calculate stats gained from gear and check tier bonuses
         double healing_power_gear = 0, int_gear = 0, spi_gear = 0, mana_gear = 0, spell_crit_gear = 0;
         for (const Item gear : _gearSet) {
@@ -826,6 +834,9 @@ private:
         if (_T2_3PC) casting_regen_coefficient += 0.15;
         _mp5_casting = _mp5_gear + _mp5_spirit*casting_regen_coefficient;
         if (debug) std::cout << "final attributes calculated" << std::endl;
+
+        // Add mana for innervate
+        _maxMana += 5*_mp5_spirit*4;
 
         return;
     }
