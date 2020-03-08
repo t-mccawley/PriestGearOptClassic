@@ -56,19 +56,23 @@ Now, run the executable from a terminal.
 
 The program will ask for user input of which encounter to analyze then will perform the optimization. See example below:
 
-![Example Input](https://github.com/t-mccawley/PriestGearOptClassic/blob/master/media/example_input.PNG)
+<p align="center">
+  <img src="https://github.com/t-mccawley/PriestGearOptClassic/blob/master/media/example_input.PNG"/>
+</p>
 
 This particular example took ~4 min to analyze over 2 million combinations.
 
-![Example Runtime](https://github.com/t-mccawley/PriestGearOptClassic/blob/master/media/example_runtime.PNG)
+<p align="center">
+  <img src="https://github.com/t-mccawley/PriestGearOptClassic/blob/master/media/example_runtime.PNG"/>
+</p>
 
 ## Outputs
 The program will have two main outputs for each of the top 3 gear combinations with highest "healing score":
 1. The priest state (attributes) and optimal healing spells for the gear combination with the highest "healing score".
-![Example Output 1](https://github.com/t-mccawley/PriestGearOptClassic/blob/master/media/example_output_1.PNG)
+<p align="center">
+  <img src="https://github.com/t-mccawley/PriestGearOptClassic/blob/master/media/example_output_1.PNG"/>
+</p>
 2. The set of gear which is associated with the highest "healing score".
-![Example Output 2](https://github.com/t-mccawley/PriestGearOptClassic/blob/master/media/example_output_2.PNG)
-
 <p align="center">
   <img src="https://github.com/t-mccawley/PriestGearOptClassic/blob/master/media/example_output_2.PNG"/>
 </p>
