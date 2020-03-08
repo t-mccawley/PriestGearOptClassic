@@ -295,7 +295,7 @@ public:
         // Read data from CSV
         // Return validity
 
-        ifstream file ( "../data/gear_owned.csv" ); // declare file stream: http://www.cplusplus.com/reference/iostream/ifstream/
+        ifstream file ( "../../data/gear.csv" ); // declare file stream: http://www.cplusplus.com/reference/iostream/ifstream/
         if (!file.good()) {
             std::cout << "Bad gear data file path!" << std::endl;
             return false;
@@ -504,7 +504,7 @@ private:
 public:
     TalentTree() {
         // Read talents.csv
-        ifstream file ( "../data/talents.csv" );
+        ifstream file ( "../../data/talents.csv" );
         if (!file.good()) {
             std::cout << "Bad talents data file path!" << std::endl;
             _valid = false;
@@ -765,6 +765,7 @@ private:
     // Tier bonuses
     bool _T1_3PC, _T1_5PC, _T2_3PC, _T2_8PC;
     // Quantities to maximize
+    vector<double> _weights; //Weights used to create _healing_score
     double _peakHps; // Peak HpS possible
     Spell _peakHpS_Spell;
     double _fastThroughput; // Best average HpS over whole encounter for spell cast time 2s or less
@@ -845,7 +846,42 @@ public:
     Priest(): _talents(), _gearSet(), _spellBook(), 
     _healingPower(0.0), _intellect(0.0), _spirit(0.0), _maxMana(0.0), _spellCrit(0.0), _mp5_gear(0.0), _mp5_spirit(0.0), _mp5_casting(0.0),
     _T1_3PC(false), _T1_5PC(false), _T2_3PC(false), _T2_8PC(false),
-    _peakHps(0.0), _peakHpS_Spell(), _fastThroughput(0.0), _fastThroughput_Spell(), _maxThroughput(0.0), _maxThroughput_Spell(), _healingScore(0.0) {};
+    _peakHps(0.0), _peakHpS_Spell(), _fastThroughput(0.0), _fastThroughput_Spell(), _maxThroughput(0.0), _maxThroughput_Spell(), _healingScore(0.0) 
+    {
+    // Read Optimization Config
+    string line;
+    std::cout << "Reading opt config..." << std::endl;
+    ifstream file ( "../../config/opt.csv" );
+    if (!file.good()) {
+        std::cout << "Bad opt config file path!" << std::endl;
+        return;
+    }
+    _weights.push_back(0.0);
+    _weights.push_back(0.0);
+    _weights.push_back(0.0);
+    // Skip first line    
+    getline(file, line);
+    // Read data (by line)
+    while ( getline(file, line) ) {
+        // Read data (by csv)
+        int cnt_csv = 0;
+        istringstream str_str(line);
+        string value;
+        while (getline(str_str, value,',')) {
+            if (cnt_csv == 0) {
+                _weights[0] = stod(value);
+            } else if (cnt_csv == 1) {
+                _weights[1] = stod(value);
+            } else if (cnt_csv == 2) {
+                _weights[2] = stod(value);
+            } else {
+                std::cout << "Malformed opt.csv" << std::endl;
+                return;
+            }
+            ++cnt_csv;
+        }
+    }
+    };
 
     inline double getHealingScore() const { return(_healingScore); };
 
@@ -930,7 +966,7 @@ public:
             }
         }
 
-        _healingScore = _peakHps + _fastThroughput + _maxThroughput;
+        _healingScore = _weights[0]*_peakHps + _weights[1]*_maxThroughput + _weights[2]*_fastThroughput;
         return (_healingScore);
     }
 };
@@ -949,12 +985,15 @@ ostream & operator << (ostream& out, const Priest& priest) {
     std::cout << "\tTier 1 - 5 Piece Bonus: " << priest._T1_5PC << std::endl;
     std::cout << "\tTier 2 - 3 Piece Bonus: " << priest._T2_3PC << std::endl;
     std::cout << "\tTier 2 - 8 Piece Bonus: " << priest._T2_8PC << std::endl;
-    std::cout << "\tPeak HpS: " << priest._peakHps << std::endl;
-    std::cout << "\tPeak HpS Spell: " << priest._peakHpS_Spell << std::endl;
-    std::cout << "\tMax Throughput HpS (fast): " << priest._fastThroughput << std::endl;
-    std::cout << "\tMax Throughput HpS (fast) Spell: " << priest._fastThroughput_Spell << std::endl;
-    std::cout << "\tMax Throughput HpS: " << priest._maxThroughput << std::endl;
-    std::cout << "\tMax Throughput HpS Spell: " << priest._maxThroughput_Spell << std::endl;
+    std::cout << "\tPeak HpS:" << std::endl;
+    std::cout << "\t\tSpell: " << priest._peakHpS_Spell << std::endl;
+    std::cout << "\t\tHpS: " << priest._peakHps << std::endl;
+    std::cout << "\tMax Throughput: " << std::endl;
+    std::cout << "\t\tSpell: " << priest._maxThroughput_Spell << std::endl;
+    std::cout << "\t\tHpS: " << priest._maxThroughput << std::endl;
+    std::cout << "\tMax Throughput (Fast): " << std::endl;
+    std::cout << "\t\tSpell: " << priest._fastThroughput_Spell << std::endl;
+    std::cout << "\t\tHpS: " << priest._fastThroughput << std::endl;
     std::cout << "\tHealing Score: " << priest._healingScore << std::endl;
     return out;
 }
@@ -962,7 +1001,7 @@ ostream & operator << (ostream& out, const Priest& priest) {
 int main() {
     bool verbose = true;
     // Read encounters.csv
-    ifstream file ( "../data/encounters.csv" );
+    ifstream file ( "../../data/encounters.csv" );
     if (!file.good()) {
         std::cout << "Bad encounters data file path!" << std::endl;
         return 1;

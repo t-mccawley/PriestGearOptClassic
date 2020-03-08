@@ -10,17 +10,37 @@
             "args": [
                 "-g",
                 "-Wall",
-                "${workspaceFolder}/src/*.cpp",                
+                "${workspaceFolder}/src/*.cpp",
                 "-I",
                 "${workspaceFolder}/include/",
                 "-o",
-                "${workspaceFolder}/bin/PriestGearOptClassic"
-                
+                "${workspaceFolder}/bin/linux/PriestGearOptClassic"
             ],
             "group": {
                 "kind": "build",
                 "isDefault": true
             }
+        },
+        {
+            "label": "mingw build PriestGearOptClassic",
+            "type": "shell",
+            "command": "g++",
+            "args": [
+                "-g",
+                "-Wall",
+                "${workspaceFolder}/src/*.cpp",
+                "-I",
+                "${workspaceFolder}/include/",
+                "-o",
+                "${workspaceFolder}/bin/windows/PriestGearOptClassic"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": [
+                "$gcc"
+            ]
         }
     ]
 }
