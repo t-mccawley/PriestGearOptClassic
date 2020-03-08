@@ -67,8 +67,8 @@ The program will have two main outputs for each of the top 3 gear combinations w
 1. The priest state (attributes) and optimal healing spells for the gear combination with the highest "healing score".
 ![Example Output 1](https://github.com/t-mccawley/PriestGearOptClassic/blob/master/media/example_output_1.PNG)
 2. The set of gear which is associated with the highest "healing score".
-![Example Output 2](http://https://github.com/t-mccawley/PriestGearOptClassic/blob/master/media/example_output_2.PNG)
+![Example Output 2](https://github.com/t-mccawley/PriestGearOptClassic/blob/master/media/example_output_2.PNG)
 
 <p align="center">
-  <img src="http://https://github.com/t-mccawley/PriestGearOptClassic/blob/master/media/example_output_2.PNG"/>
+  <img src="https://github.com/t-mccawley/PriestGearOptClassic/blob/master/media/example_output_2.PNG"/>
 </p>
