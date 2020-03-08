@@ -41,15 +41,15 @@ Note that the current algorithm simply iterates over every possible gear combina
 First, configure the input CSVs which define your item list, priest talents, and other configuration parameters.
 
 The tool is configured via various CSV files:
-1. data/encounters.csv
+1. **data/encounters.csv**
   - Contains the list of encounters you would like to choose from and the encounter duration in seconds.
-2. data/gear.csv
+2. **data/gear.csv**
   - Contains a list of all items which you want the tool to consider when determining the optimal set.
   - The time complexity for this algorithm is approximately O(n^18) where n is the number of items for each slot to be analyzed (more on
   this in the How It Works section). This means the runtime can be very long if you select too many items (limit to 2-3 per slot).
-3. data/talents.csv
+3. **data/talents.csv**
   The priest talents.
-4. config/opt.csv
+4. **config/opt.csv**
   Configuration parameters for the objective function which is maximized, more on this in the How It Works section.
   
 Now, run the executable from a terminal.
