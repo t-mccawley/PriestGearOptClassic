@@ -1,7 +1,7 @@
 # PriestGearOptClassic
 This is a tool to assist players of World of Warcraft Classic. The tool calculates the optimal gear and single cast "core" spell for a priest given a bank of items, priest talents, and encounter length.
 ## How to Use
-![Example Input](PriestGearOptClassic/media/example_input.png)
-![Example Output 1](/media/example_output_1.png)
-![Example Output 2](/media/example_output_2.png)
-![Example Runtime](/media/example_runtime.png)
+![Example Input](https://github.com/t-mccawley/PriestGearOptClassic/blob/master/media/example_input.PNG)
+![Example Output 1](https://github.com/t-mccawley/PriestGearOptClassic/blob/master/media/example_output_1.PNG)
+![Example Output 2](https://github.com/t-mccawley/PriestGearOptClassic/blob/master/media/example_output_2.PNG)
+![Example Runtime](https://github.com/t-mccawley/PriestGearOptClassic/blob/master/media/example_runtime.PNG)
